@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rodgers Playbook — Civil Engineering Visual Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --panel-2: #fafbfc;
+    --ink: #0b1220;
+    --ink-2: #1e293b;
+    --muted: #64748b;
+    --muted-2: #94a3b8;
+    --line: #e4e7ec;
+    --line-2: #eef1f4;
+    --accent: #d97706;       /* amber 600 — hi-viz engineering */
+    --accent-2: #f59e0b;
+    --accent-soft: #fef3c7;
+    --blue: #1d4ed8;
+    --blue-soft: #dbeafe;
+    --green: #047857;
+    --green-soft: #d1fae5;
+    --red: #dc2626;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 1px 2px rgba(10,20,40,0.04), 0 1px 1px rgba(10,20,40,0.03);
+    --shadow: 0 4px 20px rgba(10,20,40,0.06), 0 1px 2px rgba(10,20,40,0.04);
+    --shadow-lg: 0 20px 50px rgba(10,20,40,0.12);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, textarea, select { font-family: inherit; }
+
+  /* =============== APP SHELL =============== */
+  .app {
+    display: grid;
+    grid-template-columns: 280px 1fr 360px;
+    grid-template-rows: 56px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Top bar */
+  .topbar {
+    grid-column: 1 / -1;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 18px;
+    border-bottom: 1px solid #111827;
+    z-index: 50;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    display: grid; place-items: center;
+    font-weight: 800; color: #fff; font-size: 13px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1) inset, 0 1px 4px rgba(217,119,6,0.35);
+  }
+  .brand-title { font-size: 14px; }
+  .brand-subtitle { font-size: 11px; color: #94a3b8; font-weight: 500; letter-spacing: 0.01em; }
+  .crumb {
+    font-size: 12px; color: #94a3b8;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 16px; border-left: 1px solid #1e293b;
+    height: 56px; line-height: 56px;
+  }
+  .crumb b { color: #e2e8f0; font-weight: 600; }
+  .spacer { flex: 1; }
+
+  .mode-toggle {
+    display: flex; background: #1f2937; padding: 3px; border-radius: 8px; gap: 2px;
+  }
+  .mode-toggle button {
+    padding: 6px 14px; font-size: 12px; font-weight: 500;
+    color: #94a3b8; border-radius: 6px; transition: all 0.15s;
+  }
+  .mode-toggle button.active { background: var(--accent); color: #fff; }
+
+  .top-action {
+    font-size: 12px; font-weight: 500; color: #cbd5e1;
+    padding: 7px 12px; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+  .top-action:hover { background: #1f2937; color: #fff; }
+  .top-action.primary {
+    background: var(--accent); color: #fff;
+  }
+  .top-action.primary:hover { background: #b45309; color: #fff; }
+
+  /* =============== LEFT SIDEBAR =============== */
+  .sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .side-head {
+    padding: 18px 18px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .side-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+  }
+  .side-add {
+    font-size: 11px; color: var(--accent); font-weight: 600;
+  }
+  .side-add:hover { text-decoration: underline; }
+
+  .module {
+    border-top: 1px solid var(--line-2);
+    padding: 0;
+  }
+  .module:first-of-type { border-top: none; }
+
+  .module-head {
+    padding: 11px 18px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .module-head:hover { background: var(--panel-2); }
+  .module-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    display: grid; place-items: center;
+    flex-shrink: 0; font-size: 14px;
+  }
+  .module-name {
+    flex: 1; font-weight: 600; font-size: 13px; color: var(--ink-2);
+  }
+  .module-count {
+    font-size: 11px; color: var(--muted-2);
+    background: var(--panel-2); padding: 2px 7px; border-radius: 10px;
+    font-weight: 500;
+  }
+  .module-chevron {
+    color: var(--muted-2); transition: transform 0.15s;
+    font-size: 10px;
+  }
+  .module.collapsed .module-chevron { transform: rotate(-90deg); }
+  .module.collapsed .module-slides { display: none; }
+
+  .module-slides {
+    padding: 2px 10px 10px;
+  }
+  .slide-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 8px 7px 36px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    cursor: pointer;
+    color: var(--ink-2);
+    position: relative;
+    transition: background 0.1s;
+  }
+  .slide-item::before {
+    content: '';
+    position: absolute; left: 20px; top: 50%;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--muted-2);
+    transform: translateY(-50%);
+  }
+  .slide-item:hover { background: var(--panel-2); }
+  .slide-item.active {
+    background: var(--accent-soft);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .slide-item.active::before { background: var(--accent); }
+  .slide-item .s-num {
+    font-size: 10px; color: var(--muted-2); font-family: var(--mono);
+    margin-right: 2px;
+  }
+  .slide-item .s-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .slide-item .s-status {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line);
+    flex-shrink: 0;
+  }
+  .slide-item .s-status.has-images { background: var(--blue); }
+  .slide-item .s-status.has-narration { background: var(--green); }
+  .slide-item .s-status.complete { background: var(--accent); }
+
+  .module-add-slide {
+    display: block;
+    padding: 6px 8px 6px 36px;
+    font-size: 11.5px;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .module-add-slide:hover { color: var(--accent); background: var(--panel-2); }
+
+  /* =============== MAIN CANVAS =============== */
+  .canvas {
+    background: var(--bg);
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+
+  .canvas-toolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 500;
+    background: var(--panel-2); color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .pill.amber { background: var(--accent-soft); color: #92400e; border-color: #fde68a; }
+  .pill.blue  { background: var(--blue-soft); color: #1e40af; border-color: #bfdbfe; }
+  .pill.green { background: var(--green-soft); color: #065f46; border-color: #a7f3d0; }
+
+  .icon-btn {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: grid; place-items: center;
+    color: var(--muted-2); transition: all 0.15s;
+  }
+  .icon-btn:hover { background: var(--panel-2); color: var(--ink); }
+
+  .slide-stage {
+    padding: 28px 28px 40px;
+    max-width: 1100px; margin: 0 auto; width: 100%;
+  }
+
+  .slide-card {
+    background: var(--panel);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .slide-header {
+    padding: 26px 32px 18px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .slide-meta-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .editable-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    line-height: 1.2;
+    padding: 2px 4px; margin: -2px -4px;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.15s;
+  }
+  .editable-title:hover { background: var(--panel-2); }
+  .editable-title:focus { background: var(--accent-soft); }
+
+  .editable-subtitle {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    padding: 2px 4px; margin-left: -4px;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.15s;
+    display: inline-block;
+    min-width: 40px;
+  }
+  .editable-subtitle:hover { background: var(--panel-2); }
+  .editable-subtitle:focus { background: var(--accent-soft); }
+  .editable-subtitle:empty::before {
+    content: attr(data-placeholder);
+    color: var(--muted-2);
+    font-style: italic;
+  }
+
+  /* The 2-image canvas */
+  .slide-body {
+    padding: 24px 32px 28px;
+  }
+
+  .image-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .image-slot {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .image-slot:hover { border-color: var(--accent); background: linear-gradient(135deg, #fef3c7, #fef9e7); }
+  .image-slot.has-image { border-style: solid; border-color: var(--line); cursor: default; }
+  .image-slot img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+  .image-slot .placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 20px;
+  }
+  .image-slot .placeholder-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--panel);
+    display: grid; place-items: center;
+    margin-bottom: 10px;
+    color: var(--muted);
+    box-shadow: var(--shadow-sm);
+  }
+  .image-slot .placeholder-label {
+    font-size: 13px; font-weight: 600; color: var(--ink-2);
+    margin-bottom: 2px;
+  }
+  .image-slot .placeholder-hint {
+    font-size: 11.5px; color: var(--muted);
+  }
+  .image-slot .type-tag {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(11,18,32,0.82);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(4px);
+  }
+  .image-slot .slot-actions {
+    position: absolute; top: 8px; right: 8px;
+    display: flex; gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .image-slot:hover .slot-actions { opacity: 1; }
+  .slot-actions button {
+    width: 28px; height: 28px;
+    background: rgba(11,18,32,0.82);
+    color: #fff;
+    border-radius: 6px;
+    display: grid; place-items: center;
+    backdrop-filter: blur(4px);
+  }
+  .slot-actions button:hover { background: var(--accent); }
+
+  .image-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 12px;
+  }
+  .image-label {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 8px;
+    border-radius: 6px;
+    outline: none;
+    transition: background 0.15s;
+    font-weight: 500;
+    border: 1px solid transparent;
+  }
+  .image-label:hover { background: var(--panel-2); }
+  .image-label:focus { background: var(--accent-soft); border-color: #fde68a; }
+
+  /* Key lesson */
+  .key-lesson {
+    margin-top: 24px;
+    padding: 14px 18px;
+    border-left: 3px solid var(--accent);
+    background: linear-gradient(to right, var(--accent-soft), #fffaf0 70%);
+    border-radius: 8px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .key-lesson .kl-icon {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: var(--accent); color: #fff;
+    display: grid; place-items: center; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .key-lesson .kl-body { flex: 1; }
+  .key-lesson .kl-label {
+    font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: #92400e;
+    margin-bottom: 2px;
+  }
+  .key-lesson .kl-text {
+    font-size: 13.5px; color: var(--ink-2);
+    font-weight: 500;
+    outline: none;
+    padding: 2px 4px; margin: -2px -4px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .key-lesson .kl-text:hover { background: rgba(255,255,255,0.7); }
+  .key-lesson .kl-text:focus { background: #ffffff; }
+  .key-lesson .kl-text:empty::before {
+    content: attr(data-placeholder);
+    color: var(--muted-2);
+    font-style: italic;
+  }
+
+  /* Slide footer (nav) */
+  .slide-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 22px; padding: 0 2px;
+  }
+  .nav-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-2);
+    transition: all 0.15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .nav-btn:disabled:hover { border-color: var(--line); color: var(--ink-2); }
+  .slide-counter {
+    font-size: 12px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .slide-counter b { color: var(--ink); font-weight: 600; }
+
+  /* Thumbnail strip */
+  .thumb-strip {
+    display: flex; gap: 10px; padding: 14px 24px;
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .thumb {
+    flex-shrink: 0;
+    width: 140px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .thumb:hover { transform: translateY(-2px); }
+  .thumb-preview {
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    border: 2px solid var(--line);
+    background: var(--panel-2);
+    overflow: hidden;
+    display: flex;
+    position: relative;
+  }
+  .thumb.active .thumb-preview { border-color: var(--accent); }
+  .thumb-preview .th-half {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-color: #e2e8f0;
+    display: grid; place-items: center;
+    color: var(--muted-2); font-size: 18px;
+  }
+  .thumb-preview .th-half + .th-half { border-left: 1px solid var(--line); }
+  .thumb-title {
+    font-size: 11px;
+    color: var(--ink-2);
+    margin-top: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .thumb-num {
+    position: absolute; top: 4px; left: 4px;
+    background: rgba(11,18,32,0.75);
+    color: #fff; font-size: 9px; padding: 2px 5px;
+    border-radius: 3px; font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  /* =============== RIGHT PANEL =============== */
+  .right-panel {
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .right-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--line);
+    padding: 0 4px;
+  }
+  .right-tab {
+    flex: 1;
+    padding: 14px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .right-tab:hover { color: var(--ink-2); }
+  .right-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .right-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+  }
+  .right-pane { display: none; }
+  .right-pane.active { display: block; }
+
+  .field-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    margin-top: 14px;
+    display: block;
+  }
+  .field-label:first-child { margin-top: 0; }
+  .field-label .hint {
+    font-size: 10.5px; text-transform: none; letter-spacing: 0;
+    color: var(--muted-2); font-weight: 400;
+    margin-left: 6px;
+  }
+
+  .field-input, .field-textarea {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 9px 11px;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s;
+    resize: vertical;
+    font-family: inherit;
+  }
+  .field-input:focus, .field-textarea:focus {
+    background: #fff; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(217,119,6,0.1);
+  }
+  .field-textarea { min-height: 64px; line-height: 1.5; }
+
+  .teaching-item {
+    margin-bottom: 12px;
+  }
+  .teaching-q {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .teaching-q .num {
+    display: inline-grid; place-items: center;
+    width: 16px; height: 16px; border-radius: 4px;
+    background: var(--accent-soft); color: #92400e;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* Narration */
+  .narr-card {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .narr-state {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .narr-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--muted-2);
+  }
+  .narr-dot.active { background: var(--green); animation: pulse 1.3s ease-in-out infinite; }
+  .narr-dot.recording { background: var(--red); animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.15); }
+  }
+  .narr-status {
+    font-size: 12px; color: var(--ink-2); font-weight: 500;
+  }
+  .narr-duration {
+    margin-left: auto; font-family: var(--mono);
+    font-size: 11.5px; color: var(--muted);
+  }
+
+  .narr-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .narr-btn {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: all 0.15s;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink-2);
+  }
+  .narr-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .narr-btn.primary {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .narr-btn.primary:hover { background: #b45309; border-color: #b45309; color: #fff; }
+  .narr-btn.danger {
+    background: var(--red); color: #fff; border-color: var(--red);
+  }
+  .narr-btn.danger:hover { background: #b91c1c; border-color: #b91c1c; color: #fff; }
+  .narr-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .narr-btn:disabled:hover { border-color: var(--line); color: var(--ink-2); }
+
+  audio { width: 100%; margin-top: 8px; height: 34px; }
+  audio::-webkit-media-controls-panel { background-color: #fff; }
+
+  .narr-upload {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 11.5px; color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .narr-upload:hover { border-color: var(--accent); color: var(--accent); }
+  .narr-upload input { display: none; }
+
+  .narr-script {
+    margin-top: 14px;
+  }
+  .script-guide {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--blue-soft);
+    border-radius: 7px;
+    font-size: 11.5px; color: #1e3a8a;
+  }
+  .script-guide b { display: block; font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+  .script-guide ol { margin: 0; padding-left: 18px; }
+  .script-guide li { margin-bottom: 2px; }
+
+  /* Annotations */
+  .ann-list { display: flex; flex-direction: column; gap: 8px; }
+  .ann-row {
+    display: flex; gap: 6px; align-items: center;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 5px;
+  }
+  .ann-select {
+    font-size: 11px; padding: 5px 6px;
+    border: 1px solid var(--line); border-radius: 5px;
+    background: #fff; flex-shrink: 0;
+  }
+  .ann-row input {
+    flex: 1; border: none; background: transparent;
+    padding: 4px 4px; font-size: 12px; outline: none;
+  }
+  .ann-row button {
+    width: 22px; height: 22px; color: var(--muted-2);
+    border-radius: 4px;
+  }
+  .ann-row button:hover { background: #fee2e2; color: var(--red); }
+  .ann-add {
+    margin-top: 8px;
+    width: 100%;
+    padding: 7px;
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .ann-add:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* =============== PRESENTATION MODE =============== */
+  .present-mode {
+    position: fixed; inset: 0;
+    background: #0b1220;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    color: #fff;
+  }
+  .present-mode.active { display: flex; }
+  .present-header {
+    display: flex; align-items: center; padding: 16px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .present-topic {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #94a3b8; font-weight: 600;
+  }
+  .present-counter {
+    margin-left: auto; font-family: var(--mono);
+    font-size: 12px; color: #94a3b8;
+  }
+  .present-close {
+    margin-left: 16px;
+    padding: 6px 12px; font-size: 12px;
+    background: rgba(255,255,255,0.06); color: #fff;
+    border-radius: 6px; font-weight: 500;
+  }
+  .present-close:hover { background: rgba(255,255,255,0.12); }
+
+  .present-body {
+    flex: 1;
+    display: flex; flex-direction: column;
+    padding: 40px 60px;
+    overflow-y: auto;
+  }
+  .present-title {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+    color: #fff;
+  }
+  .present-subtitle {
+    font-size: 16px; color: #94a3b8;
+    margin-bottom: 32px;
+  }
+  .present-images {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    flex: 1; min-height: 0;
+  }
+  .present-img-wrap {
+    display: flex; flex-direction: column;
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .present-img {
+    flex: 1; min-height: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #0b1220;
+    display: grid; place-items: center;
+    color: #475569;
+    font-size: 14px;
+  }
+  .present-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .present-img-label {
+    padding: 14px 18px;
+    font-size: 13px; color: #cbd5e1;
+    background: #111827;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-weight: 500;
+  }
+  .present-img-label .tag {
+    display: inline-block;
+    background: rgba(217,119,6,0.15); color: var(--accent-2);
+    font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 4px; margin-right: 8px;
+    font-weight: 600;
+  }
+
+  .present-takeaway {
+    margin-top: 28px;
+    padding: 18px 22px;
+    background: linear-gradient(to right, rgba(217,119,6,0.12), rgba(217,119,6,0.04));
+    border-left: 3px solid var(--accent-2);
+    border-radius: 10px;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .present-takeaway .kl-label { color: var(--accent-2); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
+  .present-takeaway .kl-text { font-size: 15px; color: #f1f5f9; font-weight: 500; }
+
+  .present-footer {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 60px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .present-nav-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    display: grid; place-items: center;
+    transition: all 0.15s;
+  }
+  .present-nav-btn:hover { background: var(--accent); }
+  .present-nav-btn:disabled { opacity: 0.3; }
+  .present-audio { flex: 1; }
+  .present-audio audio { width: 100%; }
+  .present-hint {
+    font-size: 11px; color: #64748b;
+    font-family: var(--mono);
+  }
+
+  /* =============== UTILITIES =============== */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  .hidden { display: none !important; }
+
+  /* Empty state */
+  .empty-state {
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s;
+    z-index: 200;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Responsive safety */
+  @media (max-width: 1200px) {
+    .app { grid-template-columns: 240px 1fr 320px; }
+  }
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: 56px auto 1fr; }
+    .sidebar, .right-panel { display: none; }
+  }
+
+  /* Intro splash / welcome modal */
+  .welcome {
+    position: fixed; inset: 0;
+    background: rgba(11,18,32,0.6);
+    backdrop-filter: blur(6px);
+    z-index: 150;
+    display: none; align-items: center; justify-content: center;
+  }
+  .welcome.active { display: flex; }
+  .welcome-card {
+    width: 90%; max-width: 560px;
+    background: #fff; border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+  }
+  .welcome h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: -0.02em; }
+  .welcome p { color: var(--muted); font-size: 13.5px; line-height: 1.6; margin: 0 0 16px; }
+  .welcome ul { padding-left: 18px; margin: 0 0 20px; color: var(--ink-2); font-size: 13px; }
+  .welcome li { margin-bottom: 5px; }
+  .welcome-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .welcome-actions button {
+    padding: 9px 16px; font-size: 13px; border-radius: 7px; font-weight: 500;
+  }
+  .welcome-actions .secondary { color: var(--muted); }
+  .welcome-actions .secondary:hover { background: var(--panel-2); }
+  .welcome-actions .primary { background: var(--accent); color: #fff; }
+  .welcome-actions .primary:hover { background: #b45309; }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div>
+        <div class="brand-title">Rodgers Playbook</div>
+        <div class="brand-subtitle">Civil Engineering Visual Library</div>
+      </div>
+    </div>
+    <div class="crumb" id="crumb">
+      <span id="crumbModule">Planning</span>
+      <span style="color:#475569">›</span>
+      <b id="crumbSlide">Slide 1</b>
+    </div>
+    <div class="spacer"></div>
+    <div class="mode-toggle">
+      <button class="active" data-mode="edit">Edit</button>
+      <button data-mode="present" onclick="startPresentation()">Present</button>
+    </div>
+    <button class="top-action" onclick="exportLibrary()" title="Export library as JSON">Export</button>
+    <button class="top-action" onclick="importLibrary()" title="Import library">Import</button>
+    <button class="top-action primary" onclick="addSlide()">+ New Slide</button>
+  </header>
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <div class="side-head">
+      <div class="side-title">Topic Modules</div>
+      <button class="side-add" onclick="addModule()">+ Add</button>
+    </div>
+    <div id="moduleList"></div>
+  </aside>
+
+  <!-- MAIN CANVAS -->
+  <main class="canvas">
+    <div class="canvas-toolbar">
+      <span class="pill amber" id="pairingPill">Real-world + CAD</span>
+      <span class="pill blue" id="levelPill">Level 1 — Foundation</span>
+      <span class="pill" id="statusPill">Draft</span>
+      <div class="spacer" style="flex:1;"></div>
+      <button class="icon-btn" title="Duplicate slide" onclick="duplicateSlide()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="icon-btn" title="Delete slide" onclick="deleteSlide()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      </button>
+    </div>
+
+    <div class="slide-stage">
+      <div class="slide-card">
+
+        <div class="slide-header">
+          <div class="slide-meta-row">
+            <span class="pill" id="topicPill">Topic</span>
+          </div>
+          <div class="editable-title" id="slideTitle" contenteditable="true"
+               data-placeholder="Slide title…"></div>
+          <div class="editable-subtitle" id="slideSubtitle" contenteditable="true"
+               data-placeholder="Optional subtitle — e.g. the concept being taught"></div>
+        </div>
+
+        <div class="slide-body">
+          <div class="image-pair">
+            <div class="image-slot" id="slotA" onclick="uploadImage(0)">
+              <div class="placeholder">
+                <div class="placeholder-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="placeholder-label" id="slotAType">Image A</div>
+                <div class="placeholder-hint">Click to upload or drag a file</div>
+              </div>
+              <div class="slot-actions">
+                <button onclick="event.stopPropagation(); uploadImage(0)" title="Replace"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+                <button onclick="event.stopPropagation(); clearImage(0)" title="Remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+
+            <div class="image-slot" id="slotB" onclick="uploadImage(1)">
+              <div class="placeholder">
+                <div class="placeholder-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/></svg>
+                </div>
+                <div class="placeholder-label" id="slotBType">Image B</div>
+                <div class="placeholder-hint">Click to upload or drag a file</div>
+              </div>
+              <div class="slot-actions">
+                <button onclick="event.stopPropagation(); uploadImage(1)" title="Replace"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+                <button onclick="event.stopPropagation(); clearImage(1)" title="Remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="image-labels">
+            <div class="image-label" id="labelA" contenteditable="true" data-placeholder="Label for image A…"></div>
+            <div class="image-label" id="labelB" contenteditable="true" data-placeholder="Label for image B…"></div>
+          </div>
+
+          <div class="key-lesson">
+            <div class="kl-icon">!</div>
+            <div class="kl-body">
+              <div class="kl-label">Key Lesson</div>
+              <div class="kl-text" id="keyLesson" contenteditable="true"
+                   data-placeholder="The single takeaway an intern should walk away with…"></div>
+            </div>
+          </div>
+
+          <div class="slide-nav">
+            <button class="nav-btn" id="prevBtn" onclick="prevSlide()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+            <div class="slide-counter"><b id="slideCurrent">1</b> / <span id="slideTotal">1</span></div>
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+              Next
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="thumb-strip" id="thumbStrip"></div>
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="right-panel">
+    <div class="right-tabs">
+      <button class="right-tab active" data-tab="narration">Narration</button>
+      <button class="right-tab" data-tab="teaching">Teaching</button>
+      <button class="right-tab" data-tab="notes">Notes</button>
+      <button class="right-tab" data-tab="annotations">Callouts</button>
+    </div>
+
+    <div class="right-content">
+
+      <!-- Narration pane -->
+      <div class="right-pane active" id="pane-narration">
+        <span class="field-label">Voice Narration <span class="hint">— record, upload, or play back</span></span>
+        <div class="narr-card">
+          <div class="narr-state">
+            <div class="narr-dot" id="narrDot"></div>
+            <div class="narr-status" id="narrStatus">No narration yet</div>
+            <div class="narr-duration" id="narrDuration"></div>
+          </div>
+
+          <div class="narr-controls">
+            <button class="narr-btn primary" id="recBtn" onclick="toggleRecord()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+              <span id="recLabel">Record</span>
+            </button>
+            <button class="narr-btn" id="playBtn" onclick="playNarration()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play
+            </button>
+          </div>
+
+          <audio id="narrAudio" controls style="display:none;"></audio>
+
+          <label class="narr-upload">
+            <input type="file" accept="audio/*" id="narrUpload" onchange="uploadAudio(event)" />
+            Or upload an audio file (.mp3, .wav, .m4a)
+          </label>
+
+          <button class="narr-btn" style="width:100%; margin-top:10px;" onclick="clearNarration()" id="clearNarrBtn" disabled>
+            Clear Narration
+          </button>
+        </div>
+
+        <div class="narr-script">
+          <span class="field-label">Narration Script <span class="hint">— use as a guide while recording</span></span>
+          <textarea class="field-textarea" id="narrScript" rows="5"
+            placeholder="What you plan to say while presenting this slide…"></textarea>
+          <div class="script-guide">
+            <b>Narration Flow</b>
+            <ol>
+              <li>What is the first image?</li>
+              <li>What is the second image?</li>
+              <li>What should the viewer notice?</li>
+              <li>Why does this difference or relationship matter?</li>
+              <li>How does this concept apply on a real project?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teaching pane -->
+      <div class="right-pane" id="pane-teaching">
+        <span class="field-label">Image A Type</span>
+        <select class="field-input" id="typeA" onchange="updateImageType(0, this.value)">
+          <option>Real-world photo</option>
+          <option>CAD plan view</option>
+          <option>Profile view</option>
+          <option>Cross-section</option>
+          <option>Aerial view</option>
+          <option>Field view</option>
+          <option>Diagram</option>
+          <option>Existing condition</option>
+          <option>Finished condition</option>
+          <option>Good example</option>
+          <option>Bad example</option>
+          <option>Construction phase</option>
+          <option>Detail drawing</option>
+        </select>
+
+        <span class="field-label">Image B Type</span>
+        <select class="field-input" id="typeB" onchange="updateImageType(1, this.value)">
+          <option>Real-world photo</option>
+          <option>CAD plan view</option>
+          <option>Profile view</option>
+          <option>Cross-section</option>
+          <option>Aerial view</option>
+          <option>Field view</option>
+          <option>Diagram</option>
+          <option>Existing condition</option>
+          <option>Finished condition</option>
+          <option>Good example</option>
+          <option>Bad example</option>
+          <option>Construction phase</option>
+          <option>Detail drawing</option>
+        </select>
+
+        <span class="field-label">Pairing Pattern</span>
+        <select class="field-input" id="pairingType" onchange="updatePairing()">
+          <option value="real-vs-cad">Real-world photo + CAD plan</option>
+          <option value="existing-vs-finished">Existing condition + finished condition</option>
+          <option value="diagram-vs-field">Diagram + field application</option>
+          <option value="plan-vs-section">Plan view + cross-section</option>
+          <option value="construction-vs-final">Construction phase + final built</option>
+          <option value="good-vs-bad">Good example + bad example</option>
+          <option value="custom">Custom pairing</option>
+        </select>
+
+        <span class="field-label">Teaching Structure <span class="hint">— a scaffold for every slide</span></span>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">1</span> What are we looking at?</div>
+          <textarea class="field-textarea" id="t1" rows="2" placeholder="Brief description of each image"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">2</span> What is the relationship between the two?</div>
+          <textarea class="field-textarea" id="t2" rows="2" placeholder="How the pair connects"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">3</span> Why does it matter on a project?</div>
+          <textarea class="field-textarea" id="t3" rows="2" placeholder="Real-world consequence"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">4</span> What should an intern notice?</div>
+          <textarea class="field-textarea" id="t4" rows="2" placeholder="Specific observations"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">5</span> Takeaway</div>
+          <textarea class="field-textarea" id="t5" rows="2" placeholder="The one thing to remember"></textarea>
+        </div>
+
+        <span class="field-label">Level</span>
+        <select class="field-input" id="levelSelect" onchange="updateLevel()">
+          <option value="1">Level 1 — Foundation</option>
+          <option value="2">Level 2 — Functional</option>
+          <option value="3">Level 3 — Applied</option>
+          <option value="4">Level 4 — Proficient</option>
+          <option value="5">Level 5 — Advanced</option>
+        </select>
+
+        <span class="field-label">Status</span>
+        <select class="field-input" id="statusSelect" onchange="updateStatus()">
+          <option value="draft">Draft</option>
+          <option value="review">In Review</option>
+          <option value="ready">Ready</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+
+      <!-- Notes pane -->
+      <div class="right-pane" id="pane-notes">
+        <span class="field-label">Speaker Notes</span>
+        <textarea class="field-textarea" id="speakerNotes" rows="7"
+          placeholder="Reminders, key points, context you want visible while presenting…"></textarea>
+
+        <span class="field-label">Project Context</span>
+        <textarea class="field-textarea" id="projectContext" rows="4"
+          placeholder="Project or job this example came from, date, phase, engineer…"></textarea>
+
+        <span class="field-label">Related Resources</span>
+        <textarea class="field-textarea" id="resources" rows="3"
+          placeholder="Links to specs, standards, other slides, or reference drawings…"></textarea>
+      </div>
+
+      <!-- Annotations pane -->
+      <div class="right-pane" id="pane-annotations">
+        <span class="field-label">Callouts & Annotations <span class="hint">— things to point at during narration</span></span>
+        <div class="ann-list" id="annList"></div>
+        <button class="ann-add" onclick="addAnnotation()">+ Add callout</button>
+
+        <span class="field-label" style="margin-top: 22px;">Tags</span>
+        <input class="field-input" id="slideTags" placeholder="stormwater, utilities, onboarding…" />
+      </div>
+
+    </div>
+  </aside>
+</div>
+
+<!-- PRESENTATION MODE -->
+<div class="present-mode" id="presentMode">
+  <div class="present-header">
+    <div>
+      <div class="present-topic" id="pTopic">Topic</div>
+      <div style="margin-top:2px; font-size:14px; color:#94a3b8;" id="pPairing">Pairing</div>
+    </div>
+    <div class="present-counter" id="pCounter">1 / 1</div>
+    <button class="present-close" onclick="endPresentation()">✕ Exit (Esc)</button>
+  </div>
+  <div class="present-body">
+    <h1 class="present-title" id="pTitle"></h1>
+    <div class="present-subtitle" id="pSubtitle"></div>
+    <div class="present-images">
+      <div class="present-img-wrap">
+        <div class="present-img" id="pImgA">No image</div>
+        <div class="present-img-label"><span class="tag" id="pTagA">A</span><span id="pLabelA"></span></div>
+      </div>
+      <div class="present-img-wrap">
+        <div class="present-img" id="pImgB">No image</div>
+        <div class="present-img-label"><span class="tag" id="pTagB">B</span><span id="pLabelB"></span></div>
+      </div>
+    </div>
+    <div class="present-takeaway" id="pTakeawayBox">
+      <div>
+        <div class="kl-label">Key Lesson</div>
+        <div class="kl-text" id="pTakeaway"></div>
+      </div>
+    </div>
+  </div>
+  <div class="present-footer">
+    <button class="present-nav-btn" id="pPrev" onclick="presentPrev()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="present-nav-btn" id="pNext" onclick="presentNext()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="present-audio" id="pAudioBox">
+      <audio id="pAudio" controls></audio>
+    </div>
+    <div class="present-hint">← →  next &nbsp;·&nbsp; Space play &nbsp;·&nbsp; Esc exit</div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="welcome" id="welcome">
+  <div class="welcome-card">
+    <h2>Welcome to the Rodgers Playbook Visual Library</h2>
+    <p>This is a two-image teaching system designed for civil engineering onboarding. Every slide pairs two images so interns can see how drawings connect to real-world conditions.</p>
+    <ul>
+      <li>Pick a topic module on the left (10 are preloaded)</li>
+      <li>Click any image slot to upload a photo or CAD export</li>
+      <li>Use the <b>Narration</b> panel to record or upload your voice</li>
+      <li>Fill in the 5-part <b>Teaching</b> structure so every slide is scaffolded the same way</li>
+      <li>Hit <b>Present</b> to run the slideshow fullscreen with narration auto-play</li>
+    </ul>
+    <div class="welcome-actions">
+      <button class="secondary" onclick="closeWelcome()">Skip</button>
+      <button class="primary" onclick="closeWelcome()">Start teaching</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="imgFileInput" accept="image/*" style="display:none;" />
+<input type="file" id="libraryImport" accept="application/json" style="display:none;" onchange="handleImportFile(event)" />
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   RODGERS PLAYBOOK — CIVIL ENGINEERING VISUAL LIBRARY
+   ========================================================= */
+
+const STORAGE_KEY = 'rodgers_playbook_library_v1';
+
+/* ---------- Preloaded Content ---------- */
+const DEFAULT_LIBRARY = {
+  version: 1,
+  activeModule: 0,
+  activeSlide: 0,
+  modules: [
+    {
+      id: 'planning',
+      title: 'Planning / Pre-Development',
+      icon: '🗺',
+      color: '#0369a1',
+      slides: [
+        makeSlide({
+          title: 'Raw Land vs. Concept Plan Overlay',
+          subtitle: 'Seeing the vision before anything is built',
+          pairing: 'real-vs-cad',
+          typeA: 'Aerial view', typeB: 'CAD plan view',
+          labelA: 'Raw land — pre-development aerial',
+          labelB: 'Concept plan overlay — proposed use',
+          keyLesson: 'A concept plan turns a blank site into a development story. Every lot, road, and basin begins as an idea on top of a real piece of land.',
+          level: 1,
+          teaching: {
+            t1: 'Left: an aerial of raw, undeveloped land. Right: the same parcel with a concept plan overlay showing lots, roads, and open space.',
+            t2: 'The concept plan is the first translation of ownership boundaries and site constraints into a buildable layout.',
+            t3: 'Every line you draft later — utilities, grading, storm — exists because someone first decided what the site becomes. Understanding the concept helps you prioritize.',
+            t4: 'Notice how the concept respects drainage, access points, and easements. Nothing is drawn at random.',
+            t5: 'Design starts with land. Always know the parcel before you touch the plan.'
+          }
+        }),
+        makeSlide({
+          title: 'Existing Topo vs. Proposed Development Plan',
+          pairing: 'existing-vs-finished',
+          typeA: 'Existing condition', typeB: 'Finished condition',
+          labelA: 'Existing topographic survey',
+          labelB: 'Proposed development plan',
+          keyLesson: 'Topography dictates the design. Proposed grading, drainage, and road alignments all trace back to the existing contours.',
+          level: 1
+        })
+      ]
+    },
+    {
+      id: 'surveying',
+      title: 'Surveying & Existing Conditions',
+      icon: '📐',
+      color: '#0891b2',
+      slides: [
+        makeSlide({
+          title: 'Survey Crew in the Field vs. Survey Points in CAD',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Survey crew using total station on site',
+          labelB: 'Survey point cloud / linework in CAD',
+          keyLesson: 'Every point in CAD started as a person standing in the field. The office drawing is only as good as the field data behind it.',
+          level: 1,
+          teaching: {
+            t1: 'Left: a two-person crew running a total station. Right: the resulting point file and linework opened in CAD.',
+            t2: 'Field data becomes CAD data. Point numbers, descriptions, and codes carry directly from the instrument to the drawing.',
+            t3: 'If your CAD base is wrong, every downstream design is wrong. Surveyors are the foundation of accuracy.',
+            t4: 'Notice the descriptors on points — BOC, TOC, EP, IP. These codes tell you what each measurement represents.',
+            t5: 'Never disrespect the survey. That is the ground truth of the project.'
+          }
+        }),
+        makeSlide({
+          title: 'Control Point Photo vs. Survey File View',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Rebar-and-cap control monument',
+          labelB: 'Same control point in the CAD file',
+          keyLesson: 'Control points tie the site to a coordinate system. Lose the control, lose the project.',
+          level: 2
+        })
+      ]
+    },
+    {
+      id: 'layout-grading',
+      title: 'Site Layout / Grading',
+      icon: '📏',
+      color: '#65a30d',
+      slides: [
+        makeSlide({
+          title: 'Existing Contours vs. Proposed Grading Plan',
+          pairing: 'existing-vs-finished',
+          typeA: 'Existing condition', typeB: 'Finished condition',
+          labelA: 'Existing contours from the survey',
+          labelB: 'Proposed grading plan (spot elevations, finished contours)',
+          keyLesson: 'Grading is the art of reshaping dirt. Proposed contours tell the contractor exactly where to cut and where to fill.',
+          level: 2
+        }),
+        makeSlide({
+          title: 'Earthwork in the Field vs. Grading Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Dozer and scraper moving dirt',
+          labelB: 'Same area on the grading plan',
+          keyLesson: 'That grading plan becomes real piles of dirt. Volumes matter — cut and fill imbalance costs money.',
+          level: 2
+        })
+      ]
+    },
+    {
+      id: 'roadway',
+      title: 'Roadway Design',
+      icon: '🛣',
+      color: '#475569',
+      slides: [
+        makeSlide({
+          title: 'Road Plan View vs. Profile View',
+          pairing: 'plan-vs-section',
+          typeA: 'CAD plan view', typeB: 'Profile view',
+          labelA: 'Road plan — horizontal alignment',
+          labelB: 'Road profile — vertical alignment',
+          keyLesson: 'A road exists in two dimensions of design: plan (left-right) and profile (up-down). You must design them together.',
+          level: 2,
+          teaching: {
+            t1: 'Left: the horizontal alignment in plan view, showing curves and stationing. Right: the vertical profile showing grade changes.',
+            t2: 'Plan controls where the road goes. Profile controls how the road rises and falls.',
+            t3: 'K-values, stopping sight distance, and drainage all depend on the profile. A bad vertical curve kills a good horizontal alignment.',
+            t4: 'Notice the stationing lines up on both views. PIs, VPIs, and grade breaks all tie together.',
+            t5: 'Never design a road in plan alone. Always check profile.'
+          }
+        }),
+        makeSlide({
+          title: 'Cross-Section vs. Built Roadway Photo',
+          pairing: 'diagram-vs-field',
+          typeA: 'Cross-section', typeB: 'Real-world photo',
+          labelA: 'Typical roadway cross-section (curb, lane, shoulder, base courses)',
+          labelB: 'Finished road showing each layer in real life',
+          keyLesson: 'A cross-section is a recipe. Every line becomes a lift of asphalt, a sub-base, or a curb poured in the field.',
+          level: 3
+        }),
+        makeSlide({
+          title: 'Corridor Model vs. Actual Road Construction',
+          pairing: 'construction-vs-final',
+          typeA: 'CAD plan view', typeB: 'Construction phase',
+          labelA: '3D corridor model in Civil 3D',
+          labelB: 'Grading crew building to the model',
+          keyLesson: '3D models are now built directly by machine control. The digital road drives the real one.',
+          level: 3
+        })
+      ]
+    },
+    {
+      id: 'stormwater',
+      title: 'Stormwater / Drainage',
+      icon: '💧',
+      color: '#0284c7',
+      slides: [
+        makeSlide({
+          title: 'Catch Basin in the Field vs. Storm Structure on Plan',
+          subtitle: 'Connecting the symbol to the structure',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Installed catch basin at curb',
+          labelB: 'Storm structure symbol on the plan',
+          keyLesson: 'Every symbol on a storm plan is a real structure someone has to cast, set, and connect. Symbols are shorthand for reality.',
+          level: 1,
+          teaching: {
+            t1: 'Left: a precast catch basin installed at a curb inlet. Right: the same structure called out on the plan with a structure ID and rim/invert.',
+            t2: 'The symbol on the left is what you see every day driving. The symbol on the right is how we communicate it to the contractor.',
+            t3: 'If the rim or invert on the plan is wrong, the structure is set wrong. Water does not forgive mistakes.',
+            t4: 'Notice the structure ID, rim elevation, and pipe inverts. That tiny callout is the entire build spec.',
+            t5: 'When you draft a structure, picture the real thing. Every number matters.'
+          }
+        }),
+        makeSlide({
+          title: 'Pipe Trench vs. Pipe Network in CAD',
+          pairing: 'real-vs-cad',
+          typeA: 'Construction phase', typeB: 'CAD plan view',
+          labelA: 'Open trench with bedding and RCP installed',
+          labelB: 'Pipe network in CAD with slopes and inverts',
+          keyLesson: 'Storm pipes flow by gravity. Slope is not optional — the plan must match what gets built.',
+          level: 3
+        }),
+        makeSlide({
+          title: 'Detention Pond in the Field vs. Stormwater Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Constructed detention pond with outfall structure',
+          labelB: 'Stormwater plan showing pond contours and routing',
+          keyLesson: 'Ponds are calculated volumes, not eyeballed holes. Every elevation contour carries acre-feet of storage.',
+          level: 3
+        })
+      ]
+    },
+    {
+      id: 'utilities',
+      title: 'Water & Sewer Utilities',
+      icon: '🚰',
+      color: '#0d9488',
+      slides: [
+        makeSlide({
+          title: 'Fire Hydrant vs. Utility Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Fire hydrant in place on curb',
+          labelB: 'Hydrant symbol on the utility plan',
+          keyLesson: 'Hydrant spacing protects lives. The symbol placement on the plan directly determines where real hydrants go.',
+          level: 2
+        }),
+        makeSlide({
+          title: 'Sewer Trench vs. Utility Profile',
+          pairing: 'real-vs-cad',
+          typeA: 'Construction phase', typeB: 'Profile view',
+          labelA: 'Deep sewer trench with pipe being laid',
+          labelB: 'Sanitary sewer profile showing inverts and slopes',
+          keyLesson: 'Sanitary sewer works on gravity and minimum slopes. The profile is the build instruction — get it right or dig twice.',
+          level: 3
+        }),
+        makeSlide({
+          title: 'Valve / Fitting vs. Plan Symbol',
+          pairing: 'diagram-vs-field',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Water valve box and fittings on site',
+          labelB: 'Same valve shown as a symbol on the utility plan',
+          keyLesson: 'Water systems are assemblies of standard fittings. Every tee, cross, and valve on plan is a real part someone orders.',
+          level: 2
+        })
+      ]
+    },
+    {
+      id: 'site-features',
+      title: 'Site Features / Details',
+      icon: '♿',
+      color: '#9333ea',
+      slides: [
+        makeSlide({
+          title: 'ADA Ramp Photo vs. ADA Detail Drawing',
+          subtitle: 'Why details matter for accessibility',
+          pairing: 'diagram-vs-field',
+          typeA: 'Real-world photo', typeB: 'Detail drawing',
+          labelA: 'Built ADA ramp with truncated domes',
+          labelB: 'ADA ramp detail showing slopes and dimensions',
+          keyLesson: 'ADA details are legal requirements. A quarter-inch out of tolerance can trigger a rebuild.',
+          level: 2
+        }),
+        makeSlide({
+          title: 'Sidewalk Photo vs. Site Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Finished sidewalk with joints and curb',
+          labelB: 'Sidewalk layout on the site plan',
+          keyLesson: 'Sidewalks connect the site to its neighbors. The plan defines width, joints, and slope — not just a line.',
+          level: 2
+        }),
+        makeSlide({
+          title: 'Parking Striping vs. Pavement Detail',
+          pairing: 'diagram-vs-field',
+          typeA: 'Real-world photo', typeB: 'Detail drawing',
+          labelA: 'Fresh parking lot striping',
+          labelB: 'Striping and pavement detail',
+          keyLesson: 'Paint on asphalt looks simple but follows strict geometry. Details control stall size, ADA stalls, and traffic flow.',
+          level: 2
+        })
+      ]
+    },
+    {
+      id: 'esc',
+      title: 'Erosion & Sediment Control',
+      icon: '🌱',
+      color: '#65a30d',
+      slides: [
+        makeSlide({
+          title: 'Silt Fence in the Field vs. ESC Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Installed silt fence along perimeter',
+          labelB: 'Silt fence shown on ESC plan',
+          keyLesson: 'ESC is how we keep mud out of streams. The plan is a legal document that inspectors check against the field.',
+          level: 1
+        }),
+        makeSlide({
+          title: 'Inlet Protection Photo vs. ESC Detail',
+          pairing: 'diagram-vs-field',
+          typeA: 'Real-world photo', typeB: 'Detail drawing',
+          labelA: 'Inlet protection installed at a catch basin',
+          labelB: 'ESC detail for the same device',
+          keyLesson: 'Each ESC device has a right and wrong install. The detail is the playbook the contractor works from.',
+          level: 2
+        })
+      ]
+    },
+    {
+      id: 'construction',
+      title: 'Construction Phase',
+      icon: '🚧',
+      color: '#ea580c',
+      slides: [
+        makeSlide({
+          title: 'Excavation Photo vs. Construction Plan',
+          pairing: 'real-vs-cad',
+          typeA: 'Construction phase', typeB: 'CAD plan view',
+          labelA: 'Mass excavation on site',
+          labelB: 'Grading / construction plan for same area',
+          keyLesson: 'Construction documents become the contractor\'s marching orders. Clarity in drafting equals speed in the field.',
+          level: 3
+        }),
+        makeSlide({
+          title: 'Pipe Install vs. Utility Drawing',
+          pairing: 'real-vs-cad',
+          typeA: 'Construction phase', typeB: 'CAD plan view',
+          labelA: 'Crew installing storm or sewer pipe',
+          labelB: 'Utility plan with pipe callouts',
+          keyLesson: 'The field trusts the plan. When they hit conflicts, they stop. Good drafting prevents that stop.',
+          level: 3
+        }),
+        makeSlide({
+          title: 'Paving Operation vs. Roadway Detail',
+          pairing: 'construction-vs-final',
+          typeA: 'Construction phase', typeB: 'Detail drawing',
+          labelA: 'Paver laying asphalt',
+          labelB: 'Pavement section detail',
+          keyLesson: 'Pavement lifts, depths, and compaction all come from the detail. Shortcutting any of it shortens the pavement life.',
+          level: 3
+        })
+      ]
+    },
+    {
+      id: 'final',
+      title: 'Final Built Environment',
+      icon: '🏘',
+      color: '#be185d',
+      slides: [
+        makeSlide({
+          title: 'Finished Neighborhood vs. Original Concept',
+          pairing: 'construction-vs-final',
+          typeA: 'Aerial view', typeB: 'CAD plan view',
+          labelA: 'Finished neighborhood — aerial',
+          labelB: 'Original concept layout',
+          keyLesson: 'Every finished neighborhood traces back to a concept plan. The closer the concept matches reality, the better the team did.',
+          level: 4
+        }),
+        makeSlide({
+          title: 'Finished Roadway vs. Design Drawing',
+          pairing: 'construction-vs-final',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Completed, paved and striped roadway',
+          labelB: 'Road design drawing',
+          keyLesson: 'Great design disappears into the landscape. If it works, people never notice it.',
+          level: 4
+        }),
+        makeSlide({
+          title: 'Final Site Photo vs. Grading / Drainage Concept',
+          pairing: 'construction-vs-final',
+          typeA: 'Real-world photo', typeB: 'CAD plan view',
+          labelA: 'Final site — dry, functioning, landscaped',
+          labelB: 'Grading and drainage concept that made it work',
+          keyLesson: 'A site that drains properly is a site that lasts. Everything you learn here shows up in someone\'s backyard.',
+          level: 5
+        })
+      ]
+    }
+  ]
+};
+
+function makeSlide(overrides = {}) {
+  return Object.assign({
+    id: 'slide_' + Math.random().toString(36).slice(2, 9),
+    title: 'Untitled Slide',
+    subtitle: '',
+    pairing: 'real-vs-cad',
+    images: [
+      { src: null, label: '', type: 'Real-world photo' },
+      { src: null, label: '', type: 'CAD plan view' }
+    ],
+    typeA: 'Real-world photo',
+    typeB: 'CAD plan view',
+    labelA: '',
+    labelB: '',
+    keyLesson: '',
+    level: 1,
+    status: 'draft',
+    teaching: { t1: '', t2: '', t3: '', t4: '', t5: '' },
+    speakerNotes: '',
+    projectContext: '',
+    resources: '',
+    narration: { audio: null, mime: null, duration: 0, script: '' },
+    annotations: [],
+    tags: ''
+  }, overrides, {
+    images: [
+      { src: null, label: overrides.labelA || '', type: overrides.typeA || 'Real-world photo' },
+      { src: null, label: overrides.labelB || '', type: overrides.typeB || 'CAD plan view' }
+    ]
+  });
+}
+
+/* ---------- State ---------- */
+let library = loadLibrary();
+
+function loadLibrary() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_LIBRARY));
+    const parsed = JSON.parse(raw);
+    // Rehydrate any missing fields
+    parsed.modules.forEach(m => m.slides.forEach(s => {
+      s.teaching = s.teaching || { t1:'',t2:'',t3:'',t4:'',t5:'' };
+      s.narration = s.narration || { audio: null, mime: null, duration: 0, script: '' };
+      s.annotations = s.annotations || [];
+      s.images = s.images || [
+        { src: null, label:'', type:'Real-world photo' },
+        { src: null, label:'', type:'CAD plan view' }
+      ];
+    }));
+    return parsed;
+  } catch(e) {
+    console.warn('Failed to load library', e);
+    return JSON.parse(JSON.stringify(DEFAULT_LIBRARY));
+  }
+}
+
+function saveLibrary() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
+  } catch(e) {
+    toast('Storage limit reached — consider exporting.');
+  }
+}
+
+function getCurrentModule() { return library.modules[library.activeModule]; }
+function getCurrentSlide() {
+  const mod = getCurrentModule();
+  if (!mod) return null;
+  return mod.slides[library.activeSlide] || mod.slides[0];
+}
+
+/* ---------- Rendering ---------- */
+function renderAll() {
+  renderModuleList();
+  renderSlide();
+  renderThumbs();
+}
+
+function renderModuleList() {
+  const el = document.getElementById('moduleList');
+  el.innerHTML = '';
+  library.modules.forEach((mod, mi) => {
+    const module = document.createElement('div');
+    module.className = 'module' + (mi === library.activeModule ? '' : ' collapsed');
+    module.innerHTML = `
+      <div class="module-head" onclick="toggleModule(${mi})">
+        <div class="module-icon" style="background:${mod.color || '#e2e8f0'}22; color:${mod.color || '#475569'}">${mod.icon || '•'}</div>
+        <div class="module-name">${escapeHtml(mod.title)}</div>
+        <div class="module-count">${mod.slides.length}</div>
+        <div class="module-chevron">▾</div>
+      </div>
+      <div class="module-slides">
+        ${mod.slides.map((s, si) => {
+          const isActive = mi === library.activeModule && si === library.activeSlide;
+          let statusClass = '';
+          const hasImg = s.images.some(i => i.src);
+          const hasNarr = s.narration && s.narration.audio;
+          if (hasImg && hasNarr) statusClass = 'complete';
+          else if (hasNarr) statusClass = 'has-narration';
+          else if (hasImg) statusClass = 'has-images';
+          return `
+            <div class="slide-item ${isActive ? 'active' : ''}" onclick="goTo(${mi}, ${si})">
+              <span class="s-num">${String(si+1).padStart(2,'0')}</span>
+              <span class="s-title">${escapeHtml(s.title)}</span>
+              <span class="s-status ${statusClass}" title="${statusClass || 'empty'}"></span>
+            </div>`;
+        }).join('')}
+        <div class="module-add-slide" onclick="addSlideToModule(${mi})">+ Add slide to this module</div>
+      </div>`;
+    el.appendChild(module);
+  });
+}
+
+function toggleModule(mi) {
+  // If clicking the already-active module, just collapse/expand visually
+  if (mi !== library.activeModule) {
+    library.activeModule = mi;
+    library.activeSlide = 0;
+    saveLibrary();
+  }
+  renderAll();
+}
+
+function goTo(mi, si) {
+  library.activeModule = mi;
+  library.activeSlide = si;
+  saveLibrary();
+  renderAll();
+}
+
+function renderSlide() {
+  const slide = getCurrentSlide();
+  const mod = getCurrentModule();
+  if (!slide) return;
+
+  // Breadcrumb
+  document.getElementById('crumbModule').textContent = mod.title;
+  document.getElementById('crumbSlide').textContent = `Slide ${library.activeSlide + 1} — ${slide.title}`;
+
+  // Pills
+  document.getElementById('topicPill').textContent = mod.title;
+  document.getElementById('topicPill').style.background = (mod.color || '#e2e8f0') + '22';
+  document.getElementById('topicPill').style.color = mod.color || '#475569';
+  document.getElementById('topicPill').style.borderColor = (mod.color || '#e2e8f0') + '55';
+
+  document.getElementById('pairingPill').textContent = pairingLabel(slide.pairing);
+  document.getElementById('levelPill').textContent = 'Level ' + slide.level + ' — ' + levelName(slide.level);
+  document.getElementById('statusPill').textContent = capitalize(slide.status || 'draft');
+
+  // Slide fields
+  setContent('slideTitle', slide.title);
+  setContent('slideSubtitle', slide.subtitle);
+  setContent('keyLesson', slide.keyLesson);
+  setContent('labelA', slide.images[0].label);
+  setContent('labelB', slide.images[1].label);
+
+  // Image slots
+  renderSlot(0, slide.images[0]);
+  renderSlot(1, slide.images[1]);
+
+  // Right panel fields
+  setValue('typeA', slide.images[0].type);
+  setValue('typeB', slide.images[1].type);
+  setValue('pairingType', slide.pairing);
+  setValue('levelSelect', slide.level);
+  setValue('statusSelect', slide.status || 'draft');
+  setValue('t1', slide.teaching.t1);
+  setValue('t2', slide.teaching.t2);
+  setValue('t3', slide.teaching.t3);
+  setValue('t4', slide.teaching.t4);
+  setValue('t5', slide.teaching.t5);
+  setValue('speakerNotes', slide.speakerNotes || '');
+  setValue('projectContext', slide.projectContext || '');
+  setValue('resources', slide.resources || '');
+  setValue('narrScript', slide.narration.script || '');
+  setValue('slideTags', slide.tags || '');
+
+  // Narration
+  renderNarration();
+
+  // Annotations
+  renderAnnotations();
+
+  // Nav counter
+  document.getElementById('slideCurrent').textContent = library.activeSlide + 1;
+  document.getElementById('slideTotal').textContent = mod.slides.length;
+  document.getElementById('prevBtn').disabled = (library.activeSlide === 0);
+  document.getElementById('nextBtn').disabled = (library.activeSlide === mod.slides.length - 1);
+}
+
+function renderSlot(i, img) {
+  const slot = document.getElementById(i === 0 ? 'slotA' : 'slotB');
+  const typeLabel = document.getElementById(i === 0 ? 'slotAType' : 'slotBType');
+  typeLabel.textContent = img.type;
+  if (img.src) {
+    slot.classList.add('has-image');
+    slot.innerHTML = `
+      <img src="${img.src}" alt="${escapeHtml(img.label || '')}" />
+      <div class="type-tag">${escapeHtml(img.type)}</div>
+      <div class="slot-actions">
+        <button onclick="event.stopPropagation(); uploadImage(${i})" title="Replace"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+        <button onclick="event.stopPropagation(); clearImage(${i})" title="Remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    `;
+    slot.onclick = null;
+  } else {
+    slot.classList.remove('has-image');
+    slot.onclick = () => uploadImage(i);
+    slot.innerHTML = `
+      <div class="placeholder">
+        <div class="placeholder-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            ${i === 0
+              ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'
+              : '<path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/>'}
+          </svg>
+        </div>
+        <div class="placeholder-label">${escapeHtml(img.type)}</div>
+        <div class="placeholder-hint">Click to upload or drag a file</div>
+      </div>
+    `;
+  }
+}
+
+function renderThumbs() {
+  const strip = document.getElementById('thumbStrip');
+  const mod = getCurrentModule();
+  strip.innerHTML = '';
+  mod.slides.forEach((s, si) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (si === library.activeSlide ? ' active' : '');
+    t.onclick = () => goTo(library.activeModule, si);
+    const a = s.images[0].src ? `background-image:url('${s.images[0].src}')` : '';
+    const b = s.images[1].src ? `background-image:url('${s.images[1].src}')` : '';
+    t.innerHTML = `
+      <div class="thumb-preview">
+        <div class="thumb-num">${String(si+1).padStart(2,'0')}</div>
+        <div class="th-half" style="${a}">${s.images[0].src ? '' : '◱'}</div>
+        <div class="th-half" style="${b}">${s.images[1].src ? '' : '◰'}</div>
+      </div>
+      <div class="thumb-title">${escapeHtml(s.title)}</div>
+    `;
+    strip.appendChild(t);
+  });
+}
+
+function renderNarration() {
+  const slide = getCurrentSlide();
+  const narr = slide.narration;
+  const audioEl = document.getElementById('narrAudio');
+  const dot = document.getElementById('narrDot');
+  const status = document.getElementById('narrStatus');
+  const duration = document.getElementById('narrDuration');
+  const playBtn = document.getElementById('playBtn');
+  const clearBtn = document.getElementById('clearNarrBtn');
+
+  if (narr && narr.audio) {
+    audioEl.src = narr.audio;
+    audioEl.style.display = 'block';
+    dot.className = 'narr-dot active';
+    status.textContent = 'Narration saved';
+    duration.textContent = narr.duration ? formatDuration(narr.duration) : '';
+    playBtn.disabled = false;
+    clearBtn.disabled = false;
+  } else {
+    audioEl.src = '';
+    audioEl.style.display = 'none';
+    dot.className = 'narr-dot';
+    status.textContent = 'No narration yet';
+    duration.textContent = '';
+    playBtn.disabled = true;
+    clearBtn.disabled = true;
+  }
+}
+
+function renderAnnotations() {
+  const slide = getCurrentSlide();
+  const list = document.getElementById('annList');
+  list.innerHTML = '';
+  slide.annotations.forEach((a, idx) => {
+    const row = document.createElement('div');
+    row.className = 'ann-row';
+    row.innerHTML = `
+      <select class="ann-select" onchange="updateAnn(${idx}, 'image', this.value)">
+        <option value="A" ${a.image === 'A' ? 'selected' : ''}>A</option>
+        <option value="B" ${a.image === 'B' ? 'selected' : ''}>B</option>
+      </select>
+      <input type="text" value="${escapeHtml(a.text)}" placeholder="What to point out…" oninput="updateAnn(${idx}, 'text', this.value)" />
+      <button onclick="removeAnn(${idx})" title="Remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+/* ---------- Editing ---------- */
+function bindEditable() {
+  const fields = [
+    ['slideTitle', 'title'],
+    ['slideSubtitle', 'subtitle'],
+    ['keyLesson', 'keyLesson'],
+  ];
+  fields.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      const slide = getCurrentSlide();
+      slide[key] = el.innerText.trim();
+      saveLibrary();
+      if (key === 'title') {
+        renderModuleList();
+        renderThumbs();
+        document.getElementById('crumbSlide').textContent = `Slide ${library.activeSlide+1} — ${slide.title}`;
+      }
+    });
+  });
+
+  ['labelA', 'labelB'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      const slide = getCurrentSlide();
+      slide.images[i].label = el.innerText.trim();
+      saveLibrary();
+    });
+  });
+
+  [['t1','t1'],['t2','t2'],['t3','t3'],['t4','t4'],['t5','t5']].forEach(([id, key]) => {
+    document.getElementById(id).addEventListener('input', (e) => {
+      getCurrentSlide().teaching[key] = e.target.value;
+      saveLibrary();
+    });
+  });
+
+  document.getElementById('speakerNotes').addEventListener('input', e => { getCurrentSlide().speakerNotes = e.target.value; saveLibrary(); });
+  document.getElementById('projectContext').addEventListener('input', e => { getCurrentSlide().projectContext = e.target.value; saveLibrary(); });
+  document.getElementById('resources').addEventListener('input', e => { getCurrentSlide().resources = e.target.value; saveLibrary(); });
+  document.getElementById('narrScript').addEventListener('input', e => { getCurrentSlide().narration.script = e.target.value; saveLibrary(); });
+  document.getElementById('slideTags').addEventListener('input', e => { getCurrentSlide().tags = e.target.value; saveLibrary(); });
+}
+
+function updateImageType(i, value) {
+  const slide = getCurrentSlide();
+  slide.images[i].type = value;
+  saveLibrary();
+  renderSlot(i, slide.images[i]);
+}
+
+function updatePairing() {
+  const slide = getCurrentSlide();
+  slide.pairing = document.getElementById('pairingType').value;
+  saveLibrary();
+  document.getElementById('pairingPill').textContent = pairingLabel(slide.pairing);
+}
+
+function updateLevel() {
+  const slide = getCurrentSlide();
+  slide.level = parseInt(document.getElementById('levelSelect').value);
+  saveLibrary();
+  document.getElementById('levelPill').textContent = 'Level ' + slide.level + ' — ' + levelName(slide.level);
+}
+
+function updateStatus() {
+  const slide = getCurrentSlide();
+  slide.status = document.getElementById('statusSelect').value;
+  saveLibrary();
+  document.getElementById('statusPill').textContent = capitalize(slide.status);
+}
+
+/* ---------- Image upload ---------- */
+let pendingImageIndex = null;
+
+document.getElementById('imgFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file || pendingImageIndex === null) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const slide = getCurrentSlide();
+    slide.images[pendingImageIndex].src = reader.result;
+    saveLibrary();
+    renderSlot(pendingImageIndex, slide.images[pendingImageIndex]);
+    renderThumbs();
+    renderModuleList();
+    pendingImageIndex = null;
+    e.target.value = '';
+  };
+  reader.readAsDataURL(file);
+});
+
+function uploadImage(i) {
+  pendingImageIndex = i;
+  document.getElementById('imgFileInput').click();
+}
+
+function clearImage(i) {
+  const slide = getCurrentSlide();
+  slide.images[i].src = null;
+  saveLibrary();
+  renderSlot(i, slide.images[i]);
+  renderThumbs();
+  renderModuleList();
+}
+
+/* ---------- Drag & drop images ---------- */
+['slotA', 'slotB'].forEach((id, i) => {
+  const slot = document.getElementById(id);
+  slot.addEventListener('dragover', e => { e.preventDefault(); slot.style.borderColor = 'var(--accent)'; });
+  slot.addEventListener('dragleave', e => { slot.style.borderColor = ''; });
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const slide = getCurrentSlide();
+      slide.images[i].src = reader.result;
+      saveLibrary();
+      renderSlot(i, slide.images[i]);
+      renderThumbs();
+      renderModuleList();
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+/* ---------- Voice Recording ---------- */
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordingStart = 0;
+let recordingTimer = null;
+
+async function toggleRecord() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' :
+                 MediaRecorder.isTypeSupported('audio/mp4')  ? 'audio/mp4'  : '';
+    mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+    recordedChunks = [];
+    recordingStart = Date.now();
+
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: mime || 'audio/webm' });
+      const reader = new FileReader();
+      reader.onload = () => {
+        const slide = getCurrentSlide();
+        slide.narration.audio = reader.result;
+        slide.narration.mime = blob.type;
+        slide.narration.duration = (Date.now() - recordingStart) / 1000;
+        saveLibrary();
+        renderNarration();
+        renderModuleList();
+        toast('Narration recorded');
+      };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t => t.stop());
+      stopRecordingUI();
+    };
+
+    mediaRecorder.start();
+    startRecordingUI();
+  } catch(err) {
+    console.error(err);
+    toast('Microphone access denied or unavailable');
+  }
+}
+
+function startRecordingUI() {
+  document.getElementById('recBtn').classList.remove('primary');
+  document.getElementById('recBtn').classList.add('danger');
+  document.getElementById('recLabel').textContent = 'Stop';
+  document.getElementById('narrDot').className = 'narr-dot recording';
+  document.getElementById('narrStatus').textContent = 'Recording…';
+  recordingTimer = setInterval(() => {
+    const secs = Math.floor((Date.now() - recordingStart) / 1000);
+    document.getElementById('narrDuration').textContent = formatDuration(secs);
+  }, 250);
+}
+function stopRecordingUI() {
+  document.getElementById('recBtn').classList.add('primary');
+  document.getElementById('recBtn').classList.remove('danger');
+  document.getElementById('recLabel').textContent = 'Record';
+  clearInterval(recordingTimer);
+}
+
+function playNarration() {
+  const audio = document.getElementById('narrAudio');
+  if (audio.src) audio.play();
+}
+
+function uploadAudio(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const slide = getCurrentSlide();
+    slide.narration.audio = reader.result;
+    slide.narration.mime = file.type;
+    const tmp = new Audio(reader.result);
+    tmp.onloadedmetadata = () => {
+      slide.narration.duration = tmp.duration;
+      saveLibrary();
+      renderNarration();
+      renderModuleList();
+    };
+    saveLibrary();
+    renderNarration();
+    renderModuleList();
+    toast('Audio uploaded');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function clearNarration() {
+  const slide = getCurrentSlide();
+  slide.narration = { audio: null, mime: null, duration: 0, script: slide.narration.script || '' };
+  saveLibrary();
+  renderNarration();
+  renderModuleList();
+}
+
+/* ---------- Annotations ---------- */
+function addAnnotation() {
+  getCurrentSlide().annotations.push({ image: 'A', text: '' });
+  saveLibrary();
+  renderAnnotations();
+}
+function updateAnn(idx, key, val) {
+  getCurrentSlide().annotations[idx][key] = val;
+  saveLibrary();
+}
+function removeAnn(idx) {
+  getCurrentSlide().annotations.splice(idx, 1);
+  saveLibrary();
+  renderAnnotations();
+}
+
+/* ---------- Navigation ---------- */
+function prevSlide() {
+  if (library.activeSlide > 0) goTo(library.activeModule, library.activeSlide - 1);
+}
+function nextSlide() {
+  const mod = getCurrentModule();
+  if (library.activeSlide < mod.slides.length - 1) goTo(library.activeModule, library.activeSlide + 1);
+}
+
+/* ---------- Slide ops ---------- */
+function addSlide() { addSlideToModule(library.activeModule); }
+function addSlideToModule(mi) {
+  const newSlide = makeSlide({ title: 'New Slide' });
+  library.modules[mi].slides.push(newSlide);
+  library.activeModule = mi;
+  library.activeSlide = library.modules[mi].slides.length - 1;
+  saveLibrary();
+  renderAll();
+  toast('Slide added');
+}
+
+function duplicateSlide() {
+  const slide = getCurrentSlide();
+  const copy = JSON.parse(JSON.stringify(slide));
+  copy.id = 'slide_' + Math.random().toString(36).slice(2,9);
+  copy.title = slide.title + ' (copy)';
+  getCurrentModule().slides.splice(library.activeSlide + 1, 0, copy);
+  library.activeSlide += 1;
+  saveLibrary();
+  renderAll();
+  toast('Slide duplicated');
+}
+
+function deleteSlide() {
+  const mod = getCurrentModule();
+  if (mod.slides.length <= 1) { toast('Cannot delete the last slide in a module'); return; }
+  if (!confirm('Delete this slide? This cannot be undone.')) return;
+  mod.slides.splice(library.activeSlide, 1);
+  if (library.activeSlide >= mod.slides.length) library.activeSlide = mod.slides.length - 1;
+  saveLibrary();
+  renderAll();
+}
+
+function addModule() {
+  const title = prompt('New module title:');
+  if (!title) return;
+  library.modules.push({
+    id: 'mod_' + Math.random().toString(36).slice(2,7),
+    title,
+    icon: '📘',
+    color: '#475569',
+    slides: [ makeSlide({ title: 'First slide' }) ]
+  });
+  saveLibrary();
+  renderAll();
+}
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.right-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.right-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.right-pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- Presentation mode ---------- */
+function startPresentation() {
+  renderPresentSlide();
+  document.getElementById('presentMode').classList.add('active');
+  document.querySelector('.mode-toggle button[data-mode="edit"]').classList.remove('active');
+  document.querySelector('.mode-toggle button[data-mode="present"]').classList.add('active');
+}
+function endPresentation() {
+  document.getElementById('presentMode').classList.remove('active');
+  document.querySelector('.mode-toggle button[data-mode="edit"]').classList.add('active');
+  document.querySelector('.mode-toggle button[data-mode="present"]').classList.remove('active');
+  const a = document.getElementById('pAudio');
+  a.pause();
+  a.currentTime = 0;
+}
+function presentNext() {
+  const mod = getCurrentModule();
+  if (library.activeSlide < mod.slides.length - 1) {
+    library.activeSlide += 1;
+  } else if (library.activeModule < library.modules.length - 1) {
+    library.activeModule += 1;
+    library.activeSlide = 0;
+  } else return;
+  saveLibrary();
+  renderPresentSlide();
+  renderSlide();
+}
+function presentPrev() {
+  if (library.activeSlide > 0) {
+    library.activeSlide -= 1;
+  } else if (library.activeModule > 0) {
+    library.activeModule -= 1;
+    library.activeSlide = library.modules[library.activeModule].slides.length - 1;
+  } else return;
+  saveLibrary();
+  renderPresentSlide();
+  renderSlide();
+}
+function renderPresentSlide() {
+  const slide = getCurrentSlide();
+  const mod = getCurrentModule();
+  document.getElementById('pTopic').textContent = mod.title;
+  document.getElementById('pPairing').textContent = pairingLabel(slide.pairing);
+  document.getElementById('pTitle').textContent = slide.title;
+  document.getElementById('pSubtitle').textContent = slide.subtitle || '';
+  const imgA = document.getElementById('pImgA');
+  const imgB = document.getElementById('pImgB');
+  if (slide.images[0].src) {
+    imgA.innerHTML = `<img src="${slide.images[0].src}" alt="" />`;
+  } else {
+    imgA.innerHTML = 'No image uploaded';
+  }
+  if (slide.images[1].src) {
+    imgB.innerHTML = `<img src="${slide.images[1].src}" alt="" />`;
+  } else {
+    imgB.innerHTML = 'No image uploaded';
+  }
+  document.getElementById('pTagA').textContent = slide.images[0].type;
+  document.getElementById('pTagB').textContent = slide.images[1].type;
+  document.getElementById('pLabelA').textContent = slide.images[0].label || '';
+  document.getElementById('pLabelB').textContent = slide.images[1].label || '';
+  document.getElementById('pTakeaway').textContent = slide.keyLesson || '—';
+  const pt = document.getElementById('pTakeawayBox');
+  pt.style.display = slide.keyLesson ? '' : 'none';
+
+  // Counter (within module)
+  document.getElementById('pCounter').textContent =
+    `${library.activeSlide + 1} / ${mod.slides.length}`;
+
+  // Audio
+  const pAudio = document.getElementById('pAudio');
+  const audioBox = document.getElementById('pAudioBox');
+  if (slide.narration && slide.narration.audio) {
+    pAudio.src = slide.narration.audio;
+    audioBox.style.display = '';
+    // Auto-play with user gesture context (fails silently if blocked)
+    pAudio.play().catch(()=>{});
+  } else {
+    pAudio.removeAttribute('src');
+    audioBox.style.display = 'none';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  const presentActive = document.getElementById('presentMode').classList.contains('active');
+  if (!presentActive) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { presentNext(); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { presentPrev(); e.preventDefault(); }
+  else if (e.key === 'Escape') { endPresentation(); }
+  else if (e.key === ' ') {
+    const a = document.getElementById('pAudio');
+    if (a.src) { a.paused ? a.play() : a.pause(); e.preventDefault(); }
+  }
+});
+
+/* ---------- Import / Export ---------- */
+function exportLibrary() {
+  const dataStr = JSON.stringify(library, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'rodgers-playbook-library-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Library exported');
+}
+function importLibrary() { document.getElementById('libraryImport').click(); }
+function handleImportFile(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const parsed = JSON.parse(r.result);
+      if (!parsed.modules) throw new Error('Invalid library');
+      if (!confirm('Importing will replace the current library. Continue?')) return;
+      library = parsed;
+      library.activeModule = 0;
+      library.activeSlide = 0;
+      saveLibrary();
+      renderAll();
+      toast('Library imported');
+    } catch(err) {
+      toast('Could not import file');
+    }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+}
+
+/* ---------- Helpers ---------- */
+function setContent(id, text) {
+  const el = document.getElementById(id);
+  if (el.innerText !== text) el.innerText = text || '';
+}
+function setValue(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = val !== undefined && val !== null ? val : '';
+}
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
+}
+function pairingLabel(key) {
+  const map = {
+    'real-vs-cad': 'Real-world + CAD',
+    'existing-vs-finished': 'Existing + Finished',
+    'diagram-vs-field': 'Diagram + Field',
+    'plan-vs-section': 'Plan + Section',
+    'construction-vs-final': 'Construction + Final',
+    'good-vs-bad': 'Good + Bad Example',
+    'custom': 'Custom'
+  };
+  return map[key] || key;
+}
+function levelName(n) {
+  return ['','Foundation','Functional','Applied','Proficient','Advanced'][n] || '';
+}
+function capitalize(s) { return s ? s[0].toUpperCase() + s.slice(1) : ''; }
+function formatDuration(sec) {
+  if (!sec) return '';
+  const s = Math.floor(sec);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------- Welcome ---------- */
+function closeWelcome() {
+  document.getElementById('welcome').classList.remove('active');
+  localStorage.setItem('rodgers_playbook_welcomed', '1');
+}
+if (!localStorage.getItem('rodgers_playbook_welcomed')) {
+  document.getElementById('welcome').classList.add('active');
+}
+
+/* ---------- Init ---------- */
+bindEditable();
+renderAll();
+</script>
+</body>
+</html>
