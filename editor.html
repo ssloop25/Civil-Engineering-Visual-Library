@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Editor · Rodgers Visual Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<style>
+:root {
+  --slate: #3F4E55;
+  --slate-deep: #2F3B41;
+  --slate-soft: #5B6A70;
+  --orange: #D97F39;
+  --orange-dark: #B86A2D;
+  --orange-soft: #FBEEDD;
+  --green: #AFC935;
+  --green-dark: #7A8E20;
+  --gold: #D4A73F;
+  --ink: #1F2933;
+  --muted: #6B7780;
+  --muted-2: #9AA5AC;
+  --line: #E2E6E8;
+  --line-2: #EEF1F2;
+  --bg: #F7F7F5;
+  --card: #FFFFFF;
+  --soft: #F2F3F0;
+  --red: #DC2626;
+  --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(20,30,40,0.04);
+  --shadow: 0 4px 22px rgba(20,30,40,0.06), 0 1px 2px rgba(20,30,40,0.04);
+  --shadow-lg: 0 24px 60px rgba(20,30,40,0.18);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: none; background: none; color: inherit; }
+
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr 360px;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+}
+
+.topbar {
+  grid-column: 1 / -1;
+  background: var(--slate);
+  color: #fff;
+  padding: 0 20px;
+  display: flex; align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--slate-deep);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--orange); color: #fff;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-weight: 800; font-size: 14px;
+}
+.brand-text { line-height: 1.05; }
+.brand-name {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+}
+.brand-sub {
+  font-size: 10px; color: var(--orange);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  font-family: var(--mono); margin-top: 2px;
+}
+.crumb {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  padding: 0 14px;
+  border-left: 1px solid var(--slate-deep);
+  display: flex; align-items: center; height: 56px;
+}
+.crumb b { color: rgba(255,255,255,0.92); font-weight: 600; margin-left: 5px; }
+.spacer { flex: 1; }
+
+.save-indicator {
+  font-family: var(--mono); font-size: 10.5px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+}
+.save-indicator.saving { color: var(--gold); }
+.save-indicator.saved { color: var(--green); }
+.save-indicator .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+}
+
+.top-btn {
+  font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  padding: 7px 12px; border-radius: 6px;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.top-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.top-btn.primary { background: var(--orange); color: #fff; }
+.top-btn.primary:hover { background: var(--orange-dark); }
+.top-btn.green { background: var(--green); color: #1c2400; font-weight: 600; }
+.top-btn.green:hover { background: #98b02e; }
+
+/* ============ SIDEBAR ============ */
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+}
+.side-head {
+  padding: 14px 16px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.side-title {
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--muted); font-weight: 700;
+}
+.side-add {
+  font-family: var(--mono); font-size: 11px; color: var(--orange);
+  font-weight: 700;
+}
+.side-add:hover { text-decoration: underline; }
+
+.module {
+  border-top: 1px solid var(--line-2);
+}
+.module:first-of-type { border-top: none; }
+
+.module-head {
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.module-head:hover { background: var(--soft); }
+.module-icon {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  font-family: var(--mono); font-weight: 700; font-size: 12px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.module-name { flex: 1; font-weight: 600; font-size: 12.5px; color: var(--slate); }
+.module-count {
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  background: var(--soft); padding: 2px 7px; border-radius: 9px;
+  font-weight: 600;
+}
+.module-chevron {
+  color: var(--muted-2); font-size: 9px;
+  transition: transform 0.15s;
+}
+.module.collapsed .module-chevron { transform: rotate(-90deg); }
+.module.collapsed .module-slides { display: none; }
+
+.module-slides { padding: 2px 8px 8px; }
+.slide-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px 6px 32px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--slate-soft);
+  position: relative;
+  transition: background 0.1s;
+}
+.slide-item::before {
+  content: ''; position: absolute; left: 18px; top: 50%;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--muted-2); transform: translateY(-50%);
+}
+.slide-item:hover { background: var(--soft); color: var(--slate); }
+.slide-item.active {
+  background: var(--orange-soft); color: var(--orange-dark); font-weight: 500;
+}
+.slide-item.active::before { background: var(--orange); }
+.slide-item .ttl {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.slide-status {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--line);
+  flex-shrink: 0;
+}
+.slide-status.has-images { background: var(--gold); }
+.slide-status.has-narration { background: var(--green); }
+.slide-status.complete { background: var(--orange); }
+
+.module-add {
+  display: block;
+  padding: 6px 8px 6px 32px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 5px;
+}
+.module-add:hover { color: var(--orange); background: var(--soft); }
+
+/* ============ MAIN ============ */
+.canvas {
+  background: var(--bg);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.canvas-toolbar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 10;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 14px;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  background: var(--soft); color: var(--slate);
+  border: 1px solid var(--line);
+}
+.pill.amber { background: var(--orange-soft); color: var(--orange-dark); border-color: #F0DCC2; }
+.pill.green { background: #F0F7DC; color: var(--green-dark); border-color: #DDE8B6; }
+.icon-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: grid; place-items: center;
+  color: var(--muted-2);
+  transition: all 0.12s;
+}
+.icon-btn:hover { background: var(--soft); color: var(--slate); }
+
+.slide-stage {
+  padding: 26px 26px 36px;
+  max-width: 1100px; margin: 0 auto; width: 100%;
+}
+.slide-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.slide-header {
+  padding: 22px 28px 16px;
+  border-bottom: 1px solid var(--line-2);
+}
+.editable-title {
+  font-size: 22px; font-weight: 700; color: var(--slate);
+  letter-spacing: -0.015em; line-height: 1.22;
+  padding: 2px 4px; margin: -2px -4px;
+  border-radius: 5px; outline: none;
+  transition: background 0.15s;
+}
+.editable-title:hover { background: var(--soft); }
+.editable-title:focus { background: var(--orange-soft); }
+.editable-subtitle {
+  font-size: 13px; color: var(--slate-soft);
+  font-style: italic;
+  margin-top: 5px;
+  padding: 2px 4px; margin-left: -4px;
+  border-radius: 5px; outline: none;
+  transition: background 0.15s;
+  display: inline-block; min-width: 40px;
+}
+.editable-subtitle:hover { background: var(--soft); }
+.editable-subtitle:focus { background: var(--orange-soft); }
+.editable-subtitle:empty::before, .editable-title:empty::before, .kl-text:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-2); font-style: italic;
+}
+
+.slide-body { padding: 22px 28px 26px; }
+.image-pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.image-slot {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2px dashed var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.image-slot:hover {
+  border-color: var(--orange);
+  background: linear-gradient(135deg, #fef3c7, #fef9e7);
+}
+.image-slot.has-image {
+  border-style: solid; border-color: var(--line); cursor: default;
+}
+.image-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.image-slot .placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 18px;
+}
+.image-slot .placeholder-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: #fff;
+  display: grid; place-items: center;
+  margin-bottom: 8px; color: var(--muted);
+  box-shadow: var(--shadow-sm);
+}
+.image-slot .placeholder-label {
+  font-size: 12.5px; font-weight: 600; color: var(--slate);
+  margin-bottom: 2px;
+}
+.image-slot .placeholder-hint {
+  font-size: 11px; color: var(--muted);
+}
+.image-slot .type-tag {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(63,78,85,0.92);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+.image-slot .slot-actions {
+  position: absolute; top: 8px; right: 8px;
+  display: flex; gap: 4px;
+  opacity: 0; transition: opacity 0.15s;
+}
+.image-slot:hover .slot-actions { opacity: 1; }
+.slot-actions button {
+  width: 26px; height: 26px;
+  background: rgba(63,78,85,0.92);
+  color: #fff;
+  border-radius: 5px;
+  display: grid; place-items: center;
+  backdrop-filter: blur(4px);
+}
+.slot-actions button:hover { background: var(--orange); }
+
+.image-labels {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-top: 10px;
+}
+.image-label {
+  font-size: 12px;
+  color: var(--slate-soft);
+  padding: 6px 8px;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.15s;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.image-label:hover { background: var(--soft); }
+.image-label:focus { background: var(--orange-soft); border-color: #F0DCC2; }
+.image-label:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-2); font-style: italic;
+}
+
+.key-lesson {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--orange);
+  background: linear-gradient(to right, var(--orange-soft), #fffaf0 70%);
+  border-radius: 8px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.kl-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--orange); color: #fff;
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
+}
+.kl-body { flex: 1; }
+.kl-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--orange-dark);
+}
+.kl-text {
+  font-size: 13px; color: var(--slate); font-weight: 500;
+  outline: none; padding: 2px 4px; margin: -2px -4px;
+  border-radius: 4px; transition: background 0.12s;
+  margin-top: 2px;
+}
+.kl-text:hover { background: rgba(255,255,255,0.7); }
+.kl-text:focus { background: #fff; }
+
+.slide-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 20px; padding: 0 2px;
+}
+.nav-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px;
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 12.5px; color: var(--slate);
+  transition: all 0.15s;
+  font-weight: 500;
+}
+.nav-btn:hover { border-color: var(--orange); color: var(--orange); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.slide-counter {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted);
+}
+.slide-counter b { color: var(--slate); font-weight: 700; }
+
+/* Thumb strip */
+.thumb-strip {
+  display: flex; gap: 10px; padding: 12px 22px;
+  background: #fff; border-top: 1px solid var(--line);
+  overflow-x: auto;
+}
+.thumb {
+  flex-shrink: 0; width: 130px; cursor: pointer;
+  transition: transform 0.12s;
+}
+.thumb:hover { transform: translateY(-2px); }
+.thumb-preview {
+  aspect-ratio: 4 / 3;
+  border-radius: 6px; border: 2px solid var(--line);
+  background: var(--soft); overflow: hidden;
+  display: flex; position: relative;
+}
+.thumb.active .thumb-preview { border-color: var(--orange); }
+.thumb-preview .h {
+  flex: 1; background-size: cover; background-position: center;
+  background-color: #e2e8f0;
+  display: grid; place-items: center;
+  color: var(--muted-2); font-size: 14px;
+}
+.thumb-preview .h + .h { border-left: 1px solid var(--line); }
+.thumb-num {
+  position: absolute; top: 4px; left: 4px;
+  background: rgba(63,78,85,0.85); color: #fff;
+  font-family: var(--mono); font-size: 9px;
+  padding: 2px 5px; border-radius: 3px; font-weight: 600;
+}
+.thumb-title {
+  font-size: 11px; color: var(--slate);
+  margin-top: 5px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; font-weight: 500;
+}
+
+/* ============ RIGHT PANEL ============ */
+.right-panel {
+  background: #fff;
+  border-left: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.right-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+}
+.right-tab {
+  flex: 1;
+  padding: 13px 8px;
+  font-family: var(--mono); font-size: 11px;
+  font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+.right-tab:hover { color: var(--slate); }
+.right-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+.right-content {
+  flex: 1; overflow-y: auto; padding: 16px;
+}
+.right-pane { display: none; }
+.right-pane.active { display: block; }
+
+.field-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--muted);
+  display: block; margin-bottom: 6px; margin-top: 14px;
+}
+.field-label:first-child { margin-top: 0; }
+.field-input, .field-textarea {
+  width: 100%;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: var(--ink);
+  outline: none;
+  transition: all 0.15s;
+  resize: vertical;
+}
+.field-input:focus, .field-textarea:focus {
+  background: #fff; border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(217,127,57,0.12);
+}
+.field-textarea { min-height: 60px; line-height: 1.5; }
+
+.teaching-q {
+  font-size: 11px; color: var(--slate); font-weight: 600;
+  margin-bottom: 4px; display: flex; align-items: flex-start; gap: 6px;
+}
+.teaching-q .num {
+  display: inline-grid; place-items: center;
+  width: 16px; height: 16px; border-radius: 4px;
+  background: var(--orange-soft); color: var(--orange-dark);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.teaching-item { margin-bottom: 10px; }
+
+/* Narration */
+.narr-card {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+}
+.narr-state {
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 10px;
+}
+.narr-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--muted-2);
+}
+.narr-dot.active { background: var(--green); animation: pulse 1.4s ease-in-out infinite; }
+.narr-dot.recording { background: var(--red); animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%, 100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.2);} }
+.narr-status { font-size: 11.5px; color: var(--slate); font-weight: 500; }
+.narr-duration {
+  margin-left: auto; font-family: var(--mono);
+  font-size: 11px; color: var(--muted);
+}
+.narr-controls {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 7px;
+  margin-bottom: 10px;
+}
+.narr-btn {
+  padding: 9px;
+  border-radius: 7px;
+  font-size: 11.5px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all 0.12s;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--slate);
+}
+.narr-btn:hover { border-color: var(--orange); color: var(--orange); }
+.narr-btn.primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+.narr-btn.primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); color: #fff; }
+.narr-btn.danger { background: var(--red); color: #fff; border-color: var(--red); }
+.narr-btn.danger:hover { background: #b91c1c; border-color: #b91c1c; color: #fff; }
+.narr-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.narr-btn:disabled:hover { border-color: var(--line); color: var(--slate); }
+
+audio { width: 100%; height: 32px; }
+
+.narr-upload {
+  margin-top: 9px;
+  padding: 9px;
+  border: 1px dashed var(--line);
+  border-radius: 7px; text-align: center;
+  font-size: 11px; color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.narr-upload:hover { border-color: var(--orange); color: var(--orange); }
+.narr-upload input { display: none; }
+
+.script-guide {
+  margin-top: 9px;
+  padding: 10px 12px;
+  background: #F0F7DC;
+  border-radius: 6px;
+  font-size: 11px; color: var(--green-dark);
+}
+.script-guide b {
+  display: block;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 4px; font-weight: 700;
+}
+.script-guide ol { margin: 0; padding-left: 16px; }
+.script-guide li { margin-bottom: 2px; }
+
+.ann-list { display: flex; flex-direction: column; gap: 6px; }
+.ann-row {
+  display: flex; gap: 6px; align-items: center;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 6px; padding: 4px;
+}
+.ann-select {
+  font-size: 11px; padding: 4px 6px;
+  border: 1px solid var(--line); border-radius: 4px;
+  background: #fff; flex-shrink: 0;
+}
+.ann-row input {
+  flex: 1; border: none; background: transparent;
+  padding: 4px; font-size: 12px; outline: none;
+}
+.ann-row button {
+  width: 22px; height: 22px; color: var(--muted-2);
+  border-radius: 4px;
+}
+.ann-row button:hover { background: #fee2e2; color: var(--red); }
+.ann-add {
+  margin-top: 8px; width: 100%;
+  padding: 7px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  font-size: 11px; color: var(--muted);
+}
+.ann-add:hover { color: var(--orange); border-color: var(--orange); }
+
+/* ============ PUBLISH MODAL ============ */
+.modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(15,21,24,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-bg.active { display: flex; }
+.modal {
+  width: 92%; max-width: 600px;
+  background: #fff; border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-height: 90vh; display: flex; flex-direction: column;
+}
+.modal-head {
+  padding: 22px 28px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-head h2 {
+  margin: 0; font-size: 19px; letter-spacing: -0.015em;
+  color: var(--slate); font-weight: 700;
+}
+.modal-head p {
+  margin: 4px 0 0; color: var(--muted); font-size: 13px;
+}
+.modal-body { padding: 22px 28px; overflow-y: auto; }
+.modal-foot {
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+.modal-btn {
+  padding: 9px 16px;
+  font-size: 13px; font-weight: 500;
+  border-radius: 7px;
+  transition: all 0.12s;
+}
+.modal-btn.secondary { color: var(--muted); }
+.modal-btn.secondary:hover { background: var(--soft); color: var(--slate); }
+.modal-btn.primary { background: var(--orange); color: #fff; }
+.modal-btn.primary:hover { background: var(--orange-dark); }
+.modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.publish-checklist { font-size: 13px; }
+.publish-checklist li {
+  padding: 7px 0;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.publish-checklist li .ok {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.publish-checklist li .warn {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); color: #fff;
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.publish-step {
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.publish-step b { color: var(--orange-dark); font-weight: 700; }
+.publish-step code {
+  background: #fff;
+  padding: 2px 6px; border-radius: 4px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--slate);
+  border: 1px solid var(--line);
+}
+.publish-progress {
+  background: var(--soft); border-radius: 8px;
+  padding: 12px 14px;
+  font-family: var(--mono); font-size: 11.5px;
+  color: var(--muted);
+  height: 120px;
+  overflow-y: auto;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 18px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--slate); color: #fff;
+  padding: 9px 18px; border-radius: 7px;
+  font-size: 12.5px; box-shadow: var(--shadow-lg);
+  opacity: 0; pointer-events: none;
+  transition: all 0.25s; z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Welcome */
+.welcome {
+  position: fixed; inset: 0;
+  background: rgba(15,21,24,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 150;
+  display: none; align-items: center; justify-content: center;
+}
+.welcome.active { display: flex; }
+.welcome-card {
+  width: 92%; max-width: 580px;
+  background: #fff; border-radius: 14px;
+  padding: 30px 32px;
+  box-shadow: var(--shadow-lg);
+}
+.welcome h2 { margin: 0 0 8px; font-size: 21px; letter-spacing: -0.02em; color: var(--slate); }
+.welcome p { color: var(--muted); font-size: 13.5px; line-height: 1.55; margin: 0 0 14px; }
+.welcome ul { padding-left: 18px; margin: 0 0 18px; color: var(--slate); font-size: 13px; }
+.welcome li { margin-bottom: 5px; }
+.welcome-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.welcome-actions button { padding: 9px 16px; font-size: 13px; border-radius: 7px; font-weight: 500; }
+.welcome-actions .secondary { color: var(--muted); }
+.welcome-actions .secondary:hover { background: var(--soft); }
+.welcome-actions .primary { background: var(--orange); color: #fff; }
+.welcome-actions .primary:hover { background: var(--orange-dark); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-track { background: transparent; }
+
+@media (max-width: 1100px) { .app { grid-template-columns: 240px 1fr 320px; } }
+@media (max-width: 900px)  {
+  .app { grid-template-columns: 1fr; grid-template-rows: 56px auto 1fr; }
+  .sidebar, .right-panel { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div class="brand-text">
+        <div class="brand-name">Rodgers</div>
+        <div class="brand-sub">Editor</div>
+      </div>
+    </div>
+    <div class="crumb">
+      <span id="crumbModule">Module</span>
+      <b id="crumbSlide">Slide 1</b>
+    </div>
+    <div class="spacer"></div>
+    <div class="save-indicator saved" id="saveIndicator">
+      <span class="dot"></span>
+      <span id="saveText">All changes saved</span>
+    </div>
+    <button class="top-btn" onclick="loadFromRepo()" title="Load library.json from this folder">Load</button>
+    <button class="top-btn" onclick="exportLibrary()" title="Download a JSON backup">Backup</button>
+    <button class="top-btn" onclick="addSlide()" title="Add new slide">+ Slide</button>
+    <button class="top-btn green" onclick="openPublishModal()" title="Build the deployable bundle">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Publish
+    </button>
+  </header>
+
+  <aside class="sidebar">
+    <div class="side-head">
+      <div class="side-title">Modules</div>
+      <button class="side-add" onclick="addModule()">+ ADD</button>
+    </div>
+    <div id="moduleList"></div>
+  </aside>
+
+  <main class="canvas">
+    <div class="canvas-toolbar">
+      <span class="pill amber" id="pairingPill">Real + CAD</span>
+      <span class="pill" id="levelPill">Level 1</span>
+      <span class="pill" id="statusPill">Draft</span>
+      <div class="spacer" style="flex:1;"></div>
+      <button class="icon-btn" title="Move up" onclick="moveSlide(-1)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+      <button class="icon-btn" title="Move down" onclick="moveSlide(1)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <button class="icon-btn" title="Duplicate" onclick="duplicateSlide()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="icon-btn" title="Delete" onclick="deleteSlide()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+      </button>
+    </div>
+
+    <div class="slide-stage">
+      <div class="slide-card">
+        <div class="slide-header">
+          <div class="editable-title" id="slideTitle" contenteditable="true" data-placeholder="Slide title…"></div>
+          <div class="editable-subtitle" id="slideSubtitle" contenteditable="true" data-placeholder="Optional subtitle"></div>
+        </div>
+        <div class="slide-body">
+          <div class="image-pair">
+            <div class="image-slot" id="slotA" onclick="uploadImage(0)">
+              <div class="placeholder">
+                <div class="placeholder-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="placeholder-label" id="slotAType">Image A</div>
+                <div class="placeholder-hint">Click to upload or drag a file</div>
+              </div>
+              <div class="slot-actions">
+                <button onclick="event.stopPropagation(); uploadImage(0)" title="Replace">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                </button>
+                <button onclick="event.stopPropagation(); clearImage(0)" title="Remove">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="image-slot" id="slotB" onclick="uploadImage(1)">
+              <div class="placeholder">
+                <div class="placeholder-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/></svg>
+                </div>
+                <div class="placeholder-label" id="slotBType">Image B</div>
+                <div class="placeholder-hint">Click to upload or drag a file</div>
+              </div>
+              <div class="slot-actions">
+                <button onclick="event.stopPropagation(); uploadImage(1)" title="Replace">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                </button>
+                <button onclick="event.stopPropagation(); clearImage(1)" title="Remove">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="image-labels">
+            <div class="image-label" id="labelA" contenteditable="true" data-placeholder="Label for image A…"></div>
+            <div class="image-label" id="labelB" contenteditable="true" data-placeholder="Label for image B…"></div>
+          </div>
+          <div class="key-lesson">
+            <div class="kl-icon">!</div>
+            <div class="kl-body">
+              <div class="kl-label">Key Lesson</div>
+              <div class="kl-text" id="keyLesson" contenteditable="true" data-placeholder="The single takeaway…"></div>
+            </div>
+          </div>
+          <div class="slide-nav">
+            <button class="nav-btn" id="prevBtn" onclick="prevSlide()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+            <div class="slide-counter"><b id="slideCurrent">1</b> / <span id="slideTotal">1</span></div>
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+              Next
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="thumb-strip" id="thumbStrip"></div>
+  </main>
+
+  <aside class="right-panel">
+    <div class="right-tabs">
+      <button class="right-tab active" data-tab="narration">Voice</button>
+      <button class="right-tab" data-tab="teaching">Teach</button>
+      <button class="right-tab" data-tab="notes">Notes</button>
+      <button class="right-tab" data-tab="annotations">Tags</button>
+    </div>
+    <div class="right-content">
+
+      <div class="right-pane active" id="pane-narration">
+        <span class="field-label">Voice Narration</span>
+        <div class="narr-card">
+          <div class="narr-state">
+            <div class="narr-dot" id="narrDot"></div>
+            <div class="narr-status" id="narrStatus">No narration yet</div>
+            <div class="narr-duration" id="narrDuration"></div>
+          </div>
+          <div class="narr-controls">
+            <button class="narr-btn primary" id="recBtn" onclick="toggleRecord()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+              <span id="recLabel">Record</span>
+            </button>
+            <button class="narr-btn" id="playBtn" onclick="playNarration()" disabled>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play
+            </button>
+          </div>
+          <audio id="narrAudio" controls style="display:none;"></audio>
+          <label class="narr-upload">
+            <input type="file" accept="audio/*" id="narrUpload" onchange="uploadAudio(event)" />
+            Or upload an audio file
+          </label>
+          <button class="narr-btn" style="width:100%; margin-top:8px;" onclick="clearNarration()" id="clearNarrBtn" disabled>
+            Clear Narration
+          </button>
+        </div>
+        <span class="field-label">Narration Script</span>
+        <textarea class="field-textarea" id="narrScript" rows="4" placeholder="What you plan to say…"></textarea>
+        <div class="script-guide">
+          <b>Narration Flow</b>
+          <ol>
+            <li>What is image A?</li>
+            <li>What is image B?</li>
+            <li>What should they notice?</li>
+            <li>Why does it matter?</li>
+            <li>Takeaway</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="right-pane" id="pane-teaching">
+        <span class="field-label">Image A type</span>
+        <select class="field-input" id="typeA" onchange="updateImageType(0, this.value)">
+          <option>Real-world photo</option><option>CAD plan view</option>
+          <option>Profile view</option><option>Cross-section</option>
+          <option>Aerial view</option><option>Field view</option>
+          <option>Diagram</option><option>Existing condition</option>
+          <option>Finished condition</option><option>Good example</option>
+          <option>Bad example</option><option>Construction phase</option>
+          <option>Detail drawing</option>
+        </select>
+        <span class="field-label">Image B type</span>
+        <select class="field-input" id="typeB" onchange="updateImageType(1, this.value)">
+          <option>Real-world photo</option><option>CAD plan view</option>
+          <option>Profile view</option><option>Cross-section</option>
+          <option>Aerial view</option><option>Field view</option>
+          <option>Diagram</option><option>Existing condition</option>
+          <option>Finished condition</option><option>Good example</option>
+          <option>Bad example</option><option>Construction phase</option>
+          <option>Detail drawing</option>
+        </select>
+        <span class="field-label">Pairing pattern</span>
+        <select class="field-input" id="pairingType" onchange="updatePairing()">
+          <option value="real-vs-cad">Real-world + CAD</option>
+          <option value="existing-vs-finished">Existing + Finished</option>
+          <option value="diagram-vs-field">Diagram + Field</option>
+          <option value="plan-vs-section">Plan + Section</option>
+          <option value="construction-vs-final">Construction + Final</option>
+          <option value="good-vs-bad">Good + Bad Example</option>
+          <option value="custom">Custom</option>
+        </select>
+
+        <span class="field-label">Teaching scaffold</span>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">1</span>What are we looking at?</div>
+          <textarea class="field-textarea" id="t1" rows="2"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">2</span>Relationship between the two?</div>
+          <textarea class="field-textarea" id="t2" rows="2"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">3</span>Why does it matter?</div>
+          <textarea class="field-textarea" id="t3" rows="2"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">4</span>What should an intern notice?</div>
+          <textarea class="field-textarea" id="t4" rows="2"></textarea>
+        </div>
+        <div class="teaching-item">
+          <div class="teaching-q"><span class="num">5</span>Takeaway</div>
+          <textarea class="field-textarea" id="t5" rows="2"></textarea>
+        </div>
+
+        <span class="field-label">Level</span>
+        <select class="field-input" id="levelSelect" onchange="updateLevel()">
+          <option value="1">Level 1 — Foundation</option>
+          <option value="2">Level 2 — Functional</option>
+          <option value="3">Level 3 — Applied</option>
+          <option value="4">Level 4 — Proficient</option>
+          <option value="5">Level 5 — Advanced</option>
+        </select>
+        <span class="field-label">Status</span>
+        <select class="field-input" id="statusSelect" onchange="updateStatus()">
+          <option value="draft">Draft</option>
+          <option value="review">In Review</option>
+          <option value="ready">Ready</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+
+      <div class="right-pane" id="pane-notes">
+        <span class="field-label">Speaker Notes</span>
+        <textarea class="field-textarea" id="speakerNotes" rows="6" placeholder="Reminders, key points…"></textarea>
+        <span class="field-label">Project context</span>
+        <textarea class="field-textarea" id="projectContext" rows="3" placeholder="Project, phase, engineer…"></textarea>
+        <span class="field-label">Related resources</span>
+        <textarea class="field-textarea" id="resources" rows="3" placeholder="Spec links, references…"></textarea>
+      </div>
+
+      <div class="right-pane" id="pane-annotations">
+        <span class="field-label">Callouts</span>
+        <div class="ann-list" id="annList"></div>
+        <button class="ann-add" onclick="addAnnotation()">+ Add callout</button>
+        <span class="field-label" style="margin-top: 18px;">Tags</span>
+        <input class="field-input" id="slideTags" placeholder="comma-separated tags" />
+      </div>
+
+    </div>
+  </aside>
+</div>
+
+<!-- PUBLISH MODAL -->
+<div class="modal-bg" id="publishModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Publish to GitHub</h2>
+      <p>Build a deployable bundle and push it to your repo.</p>
+    </div>
+    <div class="modal-body" id="publishBody">
+      <div id="publishChecklist"></div>
+      <div id="publishOutput" style="display:none;"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="modal-btn secondary" onclick="closePublishModal()">Close</button>
+      <button class="modal-btn primary" id="publishBtn" onclick="buildBundle()">Build &amp; Download Bundle</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="welcome" id="welcome">
+  <div class="welcome-card">
+    <h2>You're in the editor</h2>
+    <p>This is the private authoring tool. Visitors to your site never see this — they see a polished read-only viewer.</p>
+    <ul>
+      <li>Click image slots to upload your photos and CAD exports</li>
+      <li>Hit <b>Record</b> in Voice to capture narration per slide</li>
+      <li>When ready, hit <b>Publish</b> — it builds a zip you drop into your GitHub repo</li>
+      <li>Your work autosaves locally as you go</li>
+    </ul>
+    <div class="welcome-actions">
+      <button class="secondary" onclick="closeWelcome()">Skip</button>
+      <button class="primary" onclick="closeWelcome()">Start authoring</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="imgFileInput" accept="image/*" style="display:none;" />
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   EDITOR · authoring + Publish bundle export
+   ===================================================== */
+
+const STORAGE_KEY = 'rodgers_playbook_library_v2';
+
+const SCAFFOLD = {
+  version: 1,
+  title: 'Civil Engineering Visual Library',
+  subtitle: 'The Rodgers Playbook · Internal Training Series',
+  tagline: 'Creating communities with clients who share our values.',
+  updated: new Date().toISOString().slice(0,10),
+  modules: []
+};
+
+let library = loadLibrary();
+let activeModule = 0;
+let activeSlide = 0;
+let saveTimer = null;
+
+function loadLibrary() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(SCAFFOLD));
+    const p = JSON.parse(raw);
+    if (!p.modules) return JSON.parse(JSON.stringify(SCAFFOLD));
+    p.modules.forEach(m => m.slides.forEach(rehydrate));
+    return p;
+  } catch(e) {
+    console.warn(e);
+    return JSON.parse(JSON.stringify(SCAFFOLD));
+  }
+}
+function rehydrate(s) {
+  s.id = s.id || ('s_' + Math.random().toString(36).slice(2, 9));
+  s.teaching = s.teaching || {t1:'',t2:'',t3:'',t4:'',t5:''};
+  s.narration = s.narration || {audio:null, mime:null, duration:0, script:''};
+  s.annotations = s.annotations || [];
+  s.images = s.images || [
+    {src:null, label:'', type:'Real-world photo'},
+    {src:null, label:'', type:'CAD plan view'}
+  ];
+  s.tags = s.tags || '';
+  s.level = s.level || 1;
+  s.status = s.status || 'draft';
+  s.pairing = s.pairing || 'real-vs-cad';
+  s.subtitle = s.subtitle || '';
+  s.speakerNotes = s.speakerNotes || '';
+  s.projectContext = s.projectContext || '';
+  s.resources = s.resources || '';
+}
+
+function saveLibrary() {
+  setSaveState('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      library.updated = new Date().toISOString().slice(0, 10);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
+      setSaveState('saved');
+    } catch(e) {
+      setSaveState('error');
+      toast('Storage full — please Publish or Backup soon');
+    }
+  }, 280);
+}
+function setSaveState(state) {
+  const ind = document.getElementById('saveIndicator');
+  const txt = document.getElementById('saveText');
+  ind.className = 'save-indicator ' + state;
+  if (state === 'saving') txt.textContent = 'Saving…';
+  else if (state === 'saved') txt.textContent = 'All changes saved';
+  else txt.textContent = 'Save error';
+}
+
+const PAIRING_LABEL = {
+  'real-vs-cad':'Real + CAD','existing-vs-finished':'Existing + Finished',
+  'diagram-vs-field':'Diagram + Field','plan-vs-section':'Plan + Section',
+  'construction-vs-final':'Construction + Final','good-vs-bad':'Good + Bad','custom':'Custom'
+};
+
+function getMod() { return library.modules[activeModule] || library.modules[0]; }
+function getSlide() { const m = getMod(); return m && (m.slides[activeSlide] || m.slides[0]); }
+
+/* ---------- Initial seed if empty ---------- */
+function seedIfEmpty() {
+  if (library.modules.length > 0) return;
+  // Seed from data/library.json if available
+  fetch('data/library.json').then(r => r.ok ? r.json() : null).then(data => {
+    if (data && data.modules) {
+      library = data;
+      library.modules.forEach(m => m.slides.forEach(rehydrate));
+      saveLibrary();
+      renderAll();
+      toast('Loaded library from data/library.json');
+    } else {
+      // Make a minimal scaffold
+      library.modules.push({
+        id: 'planning', title: 'Planning / Pre-Development', icon: '01', color: '#AFC935',
+        description: 'How a parcel becomes a development.',
+        slides: [makeSlide({title: 'New slide'})]
+      });
+      saveLibrary();
+      renderAll();
+    }
+  }).catch(() => {
+    library.modules.push({
+      id: 'planning', title: 'Planning / Pre-Development', icon: '01', color: '#AFC935',
+      slides: [makeSlide({title: 'New slide'})]
+    });
+    saveLibrary();
+    renderAll();
+  });
+}
+
+function makeSlide(o = {}) {
+  const s = {
+    id: 's_' + Math.random().toString(36).slice(2, 9),
+    title: 'New Slide', subtitle: '', pairing: 'real-vs-cad',
+    level: 1, status: 'draft', tags: '',
+    images: [
+      {src: null, label: '', type: 'Real-world photo'},
+      {src: null, label: '', type: 'CAD plan view'}
+    ],
+    keyLesson: '',
+    teaching: {t1:'',t2:'',t3:'',t4:'',t5:''},
+    speakerNotes: '', projectContext: '', resources: '',
+    narration: {audio: null, mime: null, duration: 0, script: ''},
+    annotations: []
+  };
+  Object.assign(s, o);
+  return s;
+}
+
+/* ---------- Render ---------- */
+function renderAll() { renderSidebar(); renderSlide(); renderThumbs(); }
+
+function renderSidebar() {
+  const el = document.getElementById('moduleList');
+  el.innerHTML = '';
+  library.modules.forEach((mod, mi) => {
+    const isOpen = mi === activeModule;
+    const m = document.createElement('div');
+    m.className = 'module' + (isOpen ? '' : ' collapsed');
+    m.innerHTML = `
+      <div class="module-head" onclick="selectModule(${mi})">
+        <div class="module-icon" style="background:${(mod.color||'#cbd5e1')}22; color:${mod.color||'#475569'}">${mod.icon || (mi+1)}</div>
+        <div class="module-name">${esc(mod.title)}</div>
+        <div class="module-count">${mod.slides.length}</div>
+        <div class="module-chevron">▾</div>
+      </div>
+      <div class="module-slides">
+        ${mod.slides.map((s, si) => {
+          const active = mi === activeModule && si === activeSlide;
+          let stat = '';
+          const hasI = s.images.some(i => i.src);
+          const hasN = s.narration && s.narration.audio;
+          if (hasI && hasN) stat = 'complete';
+          else if (hasN) stat = 'has-narration';
+          else if (hasI) stat = 'has-images';
+          return `
+            <div class="slide-item${active?' active':''}" onclick="goTo(${mi},${si})">
+              <span class="ttl">${esc(s.title)}</span>
+              <span class="slide-status ${stat}"></span>
+            </div>`;
+        }).join('')}
+        <div class="module-add" onclick="addSlideToModule(${mi})">+ Add slide</div>
+      </div>`;
+    el.appendChild(m);
+  });
+}
+
+function selectModule(mi) {
+  if (mi !== activeModule) {
+    activeModule = mi; activeSlide = 0;
+    saveLibrary(); renderAll();
+  } else {
+    // toggle collapse
+    document.querySelectorAll('.module')[mi].classList.toggle('collapsed');
+  }
+}
+function goTo(mi, si) {
+  activeModule = mi; activeSlide = si;
+  saveLibrary(); renderAll();
+}
+
+function renderSlide() {
+  const slide = getSlide(); const mod = getMod();
+  if (!slide) return;
+  document.getElementById('crumbModule').textContent = mod.title;
+  document.getElementById('crumbSlide').textContent = `Slide ${activeSlide+1} — ${slide.title}`;
+  document.getElementById('pairingPill').textContent = PAIRING_LABEL[slide.pairing] || slide.pairing;
+  document.getElementById('levelPill').textContent = 'Level ' + slide.level;
+  document.getElementById('statusPill').textContent = capitalize(slide.status);
+
+  setText('slideTitle', slide.title);
+  setText('slideSubtitle', slide.subtitle);
+  setText('keyLesson', slide.keyLesson);
+  setText('labelA', slide.images[0].label);
+  setText('labelB', slide.images[1].label);
+
+  renderSlot(0, slide.images[0]);
+  renderSlot(1, slide.images[1]);
+
+  setVal('typeA', slide.images[0].type);
+  setVal('typeB', slide.images[1].type);
+  setVal('pairingType', slide.pairing);
+  setVal('levelSelect', slide.level);
+  setVal('statusSelect', slide.status);
+  setVal('t1', slide.teaching.t1);
+  setVal('t2', slide.teaching.t2);
+  setVal('t3', slide.teaching.t3);
+  setVal('t4', slide.teaching.t4);
+  setVal('t5', slide.teaching.t5);
+  setVal('speakerNotes', slide.speakerNotes);
+  setVal('projectContext', slide.projectContext);
+  setVal('resources', slide.resources);
+  setVal('narrScript', slide.narration.script);
+  setVal('slideTags', slide.tags);
+
+  renderNarration(); renderAnnotations();
+
+  document.getElementById('slideCurrent').textContent = activeSlide + 1;
+  document.getElementById('slideTotal').textContent = mod.slides.length;
+  document.getElementById('prevBtn').disabled = activeSlide === 0;
+  document.getElementById('nextBtn').disabled = activeSlide === mod.slides.length - 1;
+}
+
+function renderSlot(i, img) {
+  const slot = document.getElementById(i === 0 ? 'slotA' : 'slotB');
+  if (img.src) {
+    slot.classList.add('has-image');
+    slot.innerHTML = `
+      <img src="${esc(img.src)}" alt="${esc(img.label||'')}" />
+      <div class="type-tag">${esc(img.type)}</div>
+      <div class="slot-actions">
+        <button onclick="event.stopPropagation(); uploadImage(${i})" title="Replace">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </button>
+        <button onclick="event.stopPropagation(); clearImage(${i})" title="Remove">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>`;
+    slot.onclick = null;
+  } else {
+    slot.classList.remove('has-image');
+    slot.onclick = () => uploadImage(i);
+    slot.innerHTML = `
+      <div class="placeholder">
+        <div class="placeholder-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${i===0
+            ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'
+            : '<path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/>'}</svg>
+        </div>
+        <div class="placeholder-label">${esc(img.type)}</div>
+        <div class="placeholder-hint">Click to upload or drag a file</div>
+      </div>`;
+  }
+}
+
+function renderThumbs() {
+  const strip = document.getElementById('thumbStrip');
+  const mod = getMod();
+  strip.innerHTML = '';
+  mod.slides.forEach((s, si) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (si === activeSlide ? ' active' : '');
+    t.onclick = () => goTo(activeModule, si);
+    const a = s.images[0].src ? `background-image:url('${s.images[0].src}')` : '';
+    const b = s.images[1].src ? `background-image:url('${s.images[1].src}')` : '';
+    t.innerHTML = `
+      <div class="thumb-preview">
+        <div class="thumb-num">${String(si+1).padStart(2,'0')}</div>
+        <div class="h" style="${a}">${s.images[0].src ? '' : '◱'}</div>
+        <div class="h" style="${b}">${s.images[1].src ? '' : '◰'}</div>
+      </div>
+      <div class="thumb-title">${esc(s.title)}</div>`;
+    strip.appendChild(t);
+  });
+}
+
+function renderNarration() {
+  const slide = getSlide();
+  const n = slide.narration;
+  const a = document.getElementById('narrAudio');
+  const dot = document.getElementById('narrDot');
+  const stat = document.getElementById('narrStatus');
+  const dur = document.getElementById('narrDuration');
+  const play = document.getElementById('playBtn');
+  const clr = document.getElementById('clearNarrBtn');
+  if (n && n.audio) {
+    a.src = n.audio;
+    a.style.display = 'block';
+    dot.className = 'narr-dot active';
+    stat.textContent = 'Narration saved';
+    dur.textContent = n.duration ? formatDur(n.duration) : '';
+    play.disabled = false; clr.disabled = false;
+  } else {
+    a.src = ''; a.style.display = 'none';
+    dot.className = 'narr-dot';
+    stat.textContent = 'No narration yet';
+    dur.textContent = '';
+    play.disabled = true; clr.disabled = true;
+  }
+}
+
+function renderAnnotations() {
+  const slide = getSlide();
+  const list = document.getElementById('annList');
+  list.innerHTML = '';
+  slide.annotations.forEach((a, idx) => {
+    const row = document.createElement('div');
+    row.className = 'ann-row';
+    row.innerHTML = `
+      <select class="ann-select" onchange="updateAnn(${idx},'image',this.value)">
+        <option value="A"${a.image==='A'?' selected':''}>A</option>
+        <option value="B"${a.image==='B'?' selected':''}>B</option>
+      </select>
+      <input value="${esc(a.text)}" placeholder="What to point out…" oninput="updateAnn(${idx},'text',this.value)" />
+      <button onclick="removeAnn(${idx})" title="Remove">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    list.appendChild(row);
+  });
+}
+
+/* ---------- Editing ---------- */
+function bindEdits() {
+  [['slideTitle','title'],['slideSubtitle','subtitle'],['keyLesson','keyLesson']]
+    .forEach(([id, key]) => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', () => {
+        getSlide()[key] = el.innerText.trim();
+        saveLibrary();
+        if (key === 'title') {
+          renderSidebar(); renderThumbs();
+          document.getElementById('crumbSlide').textContent = `Slide ${activeSlide+1} — ${getSlide().title}`;
+        }
+      });
+    });
+  [['labelA',0],['labelB',1]].forEach(([id, i]) => {
+    document.getElementById(id).addEventListener('input', e => {
+      getSlide().images[i].label = e.target.innerText.trim();
+      saveLibrary();
+    });
+  });
+  ['t1','t2','t3','t4','t5'].forEach(k => {
+    document.getElementById(k).addEventListener('input', e => {
+      getSlide().teaching[k] = e.target.value; saveLibrary();
+    });
+  });
+  ['speakerNotes','projectContext','resources','narrScript','slideTags'].forEach(k => {
+    document.getElementById(k).addEventListener('input', e => {
+      const slide = getSlide();
+      if (k === 'narrScript') slide.narration.script = e.target.value;
+      else slide[k] = e.target.value;
+      saveLibrary();
+    });
+  });
+}
+
+function updateImageType(i, v) {
+  getSlide().images[i].type = v; saveLibrary(); renderSlot(i, getSlide().images[i]);
+}
+function updatePairing() {
+  getSlide().pairing = document.getElementById('pairingType').value; saveLibrary();
+  document.getElementById('pairingPill').textContent = PAIRING_LABEL[getSlide().pairing];
+}
+function updateLevel() {
+  getSlide().level = parseInt(document.getElementById('levelSelect').value); saveLibrary();
+  document.getElementById('levelPill').textContent = 'Level ' + getSlide().level;
+}
+function updateStatus() {
+  getSlide().status = document.getElementById('statusSelect').value; saveLibrary();
+  document.getElementById('statusPill').textContent = capitalize(getSlide().status);
+}
+
+/* ---------- Image upload ---------- */
+let pendingImg = null;
+document.getElementById('imgFileInput').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f || pendingImg === null) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const slide = getSlide();
+    slide.images[pendingImg].src = r.result;
+    saveLibrary();
+    renderSlot(pendingImg, slide.images[pendingImg]);
+    renderThumbs(); renderSidebar();
+    pendingImg = null; e.target.value = '';
+  };
+  r.readAsDataURL(f);
+});
+function uploadImage(i) { pendingImg = i; document.getElementById('imgFileInput').click(); }
+function clearImage(i) {
+  getSlide().images[i].src = null; saveLibrary();
+  renderSlot(i, getSlide().images[i]); renderThumbs(); renderSidebar();
+}
+['slotA','slotB'].forEach((id, i) => {
+  const slot = document.getElementById(id);
+  slot.addEventListener('dragover', e => { e.preventDefault(); slot.style.borderColor = 'var(--orange)'; });
+  slot.addEventListener('dragleave', () => { slot.style.borderColor = ''; });
+  slot.addEventListener('drop', e => {
+    e.preventDefault(); slot.style.borderColor = '';
+    const f = e.dataTransfer.files[0];
+    if (!f || !f.type.startsWith('image/')) return;
+    const r = new FileReader();
+    r.onload = () => {
+      getSlide().images[i].src = r.result; saveLibrary();
+      renderSlot(i, getSlide().images[i]); renderThumbs(); renderSidebar();
+    };
+    r.readAsDataURL(f);
+  });
+});
+
+/* ---------- Voice ---------- */
+let mediaRecorder = null, chunks = [], recStart = 0, recTimer = null;
+async function toggleRecord() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') { mediaRecorder.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '';
+    mediaRecorder = new MediaRecorder(stream, mime ? {mimeType:mime} : undefined);
+    chunks = []; recStart = Date.now();
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, {type: mime || 'audio/webm'});
+      const r = new FileReader();
+      r.onload = () => {
+        const slide = getSlide();
+        slide.narration.audio = r.result;
+        slide.narration.mime = blob.type;
+        slide.narration.duration = (Date.now() - recStart) / 1000;
+        saveLibrary(); renderNarration(); renderSidebar();
+        toast('Narration recorded');
+      };
+      r.readAsDataURL(blob);
+      stream.getTracks().forEach(t => t.stop());
+      stopRecUI();
+    };
+    mediaRecorder.start();
+    startRecUI();
+  } catch(err) { toast('Microphone access denied'); }
+}
+function startRecUI() {
+  const b = document.getElementById('recBtn');
+  b.classList.remove('primary'); b.classList.add('danger');
+  document.getElementById('recLabel').textContent = 'Stop';
+  document.getElementById('narrDot').className = 'narr-dot recording';
+  document.getElementById('narrStatus').textContent = 'Recording…';
+  recTimer = setInterval(() => {
+    const s = Math.floor((Date.now() - recStart)/1000);
+    document.getElementById('narrDuration').textContent = formatDur(s);
+  }, 250);
+}
+function stopRecUI() {
+  const b = document.getElementById('recBtn');
+  b.classList.add('primary'); b.classList.remove('danger');
+  document.getElementById('recLabel').textContent = 'Record';
+  clearInterval(recTimer);
+}
+function playNarration() { document.getElementById('narrAudio').play(); }
+function uploadAudio(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const slide = getSlide();
+    slide.narration.audio = r.result; slide.narration.mime = f.type;
+    const tmp = new Audio(r.result);
+    tmp.onloadedmetadata = () => { slide.narration.duration = tmp.duration; saveLibrary(); renderNarration(); };
+    saveLibrary(); renderNarration(); renderSidebar(); toast('Audio uploaded');
+  };
+  r.readAsDataURL(f);
+  e.target.value = '';
+}
+function clearNarration() {
+  const s = getSlide();
+  s.narration = {audio:null, mime:null, duration:0, script: s.narration.script};
+  saveLibrary(); renderNarration(); renderSidebar();
+}
+
+/* ---------- Annotations ---------- */
+function addAnnotation() { getSlide().annotations.push({image:'A', text:''}); saveLibrary(); renderAnnotations(); }
+function updateAnn(idx, k, v) { getSlide().annotations[idx][k] = v; saveLibrary(); }
+function removeAnn(idx) { getSlide().annotations.splice(idx, 1); saveLibrary(); renderAnnotations(); }
+
+/* ---------- Slide ops ---------- */
+function prevSlide() { if (activeSlide > 0) goTo(activeModule, activeSlide-1); }
+function nextSlide() { if (activeSlide < getMod().slides.length - 1) goTo(activeModule, activeSlide+1); }
+function addSlide() { addSlideToModule(activeModule); }
+function addSlideToModule(mi) {
+  const s = makeSlide({title:'New Slide'});
+  library.modules[mi].slides.push(s);
+  activeModule = mi; activeSlide = library.modules[mi].slides.length - 1;
+  saveLibrary(); renderAll(); toast('Slide added');
+}
+function duplicateSlide() {
+  const s = JSON.parse(JSON.stringify(getSlide()));
+  s.id = 's_' + Math.random().toString(36).slice(2,9);
+  s.title = s.title + ' (copy)';
+  getMod().slides.splice(activeSlide+1, 0, s);
+  activeSlide += 1;
+  saveLibrary(); renderAll(); toast('Slide duplicated');
+}
+function deleteSlide() {
+  if (getMod().slides.length <= 1) { toast('Cannot delete last slide'); return; }
+  if (!confirm('Delete this slide?')) return;
+  getMod().slides.splice(activeSlide, 1);
+  if (activeSlide >= getMod().slides.length) activeSlide = getMod().slides.length - 1;
+  saveLibrary(); renderAll();
+}
+function moveSlide(dir) {
+  const m = getMod();
+  const ni = activeSlide + dir;
+  if (ni < 0 || ni >= m.slides.length) return;
+  [m.slides[activeSlide], m.slides[ni]] = [m.slides[ni], m.slides[activeSlide]];
+  activeSlide = ni;
+  saveLibrary(); renderAll();
+}
+function addModule() {
+  const t = prompt('New module title:'); if (!t) return;
+  library.modules.push({
+    id: 'm_'+Math.random().toString(36).slice(2,7),
+    title: t, icon: String(library.modules.length+1).padStart(2,'0'),
+    color: '#3F4E55', slides: [makeSlide({title:'First slide'})]
+  });
+  saveLibrary(); renderAll();
+}
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.right-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.right-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.right-pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- Backup / Load ---------- */
+function exportLibrary() {
+  const blob = new Blob([JSON.stringify(library, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'rodgers-library-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Backup downloaded');
+}
+function loadFromRepo() {
+  if (!confirm('Reload library from data/library.json? Local edits will be replaced.')) return;
+  fetch('data/library.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (!d) { toast('Could not find data/library.json'); return; }
+      library = d;
+      library.modules.forEach(m => m.slides.forEach(rehydrate));
+      activeModule = 0; activeSlide = 0;
+      saveLibrary(); renderAll();
+      toast('Loaded from data/library.json');
+    });
+}
+
+/* ---------- PUBLISH BUNDLE ---------- */
+function openPublishModal() {
+  document.getElementById('publishModal').classList.add('active');
+  renderPublishChecklist();
+}
+function closePublishModal() {
+  document.getElementById('publishModal').classList.remove('active');
+}
+function renderPublishChecklist() {
+  // Count things
+  let totalSlides = 0, withImages = 0, withNarration = 0, withKeyLesson = 0, totalImg = 0;
+  library.modules.forEach(m => m.slides.forEach(s => {
+    totalSlides++;
+    if (s.images[0].src) totalImg++;
+    if (s.images[1].src) totalImg++;
+    if (s.images[0].src && s.images[1].src) withImages++;
+    if (s.narration && s.narration.audio) withNarration++;
+    if (s.keyLesson && s.keyLesson.trim()) withKeyLesson++;
+  }));
+  const body = document.getElementById('publishBody');
+  body.innerHTML = `
+    <ul class="publish-checklist" style="list-style:none; padding:0; margin:0 0 16px;">
+      <li><div class="ok">✓</div><div><b>${library.modules.length}</b> modules · <b>${totalSlides}</b> slides total</div></li>
+      <li><div class="${withImages === totalSlides ? 'ok' : 'warn'}">${withImages === totalSlides ? '✓' : '!'}</div><div><b>${withImages}</b> of ${totalSlides} slides have both images <span style="color:var(--muted); font-size:11.5px;">(${totalImg} images total)</span></div></li>
+      <li><div class="${withKeyLesson === totalSlides ? 'ok' : 'warn'}">${withKeyLesson === totalSlides ? '✓' : '!'}</div><div><b>${withKeyLesson}</b> of ${totalSlides} slides have a key lesson</div></li>
+      <li><div class="${withNarration > 0 ? 'ok' : 'warn'}">${withNarration > 0 ? '✓' : '!'}</div><div><b>${withNarration}</b> slides have voice narration</div></li>
+    </ul>
+    <div class="publish-step">
+      <b>Step 1.</b> Click <b>Build &amp; Download</b> below. You'll get a zip with the deployable site.
+    </div>
+    <div class="publish-step">
+      <b>Step 2.</b> Unzip it into your repo folder, replacing the existing <code>data</code> and <code>media</code> folders.
+    </div>
+    <div class="publish-step">
+      <b>Step 3.</b> In your repo folder, run:
+      <div style="margin-top:6px;">
+        <code style="display:block; padding:6px 8px;">git add . &amp;&amp; git commit -m "Update library" &amp;&amp; git push</code>
+      </div>
+    </div>
+    <div class="publish-step" style="background:#F0F7DC;">
+      <b>Public URL:</b><br>
+      <code style="margin-top: 4px; display: inline-block;">https://ssloop25.github.io/Civil-Engineering-Visual-Library/</code>
+    </div>
+    <div id="publishOutput" style="display:none;"></div>
+  `;
+  document.getElementById('publishBtn').disabled = false;
+  document.getElementById('publishBtn').textContent = 'Build & Download Bundle';
+}
+
+async function buildBundle() {
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true; btn.textContent = 'Building…';
+  const outDiv = document.getElementById('publishBody');
+  outDiv.innerHTML = `<div class="publish-progress" id="prog"></div>`;
+  const log = (msg) => {
+    const p = document.getElementById('prog');
+    p.innerHTML += msg + '<br>';
+    p.scrollTop = p.scrollHeight;
+  };
+
+  try {
+    const zip = new JSZip();
+    log('→ Initializing bundle…');
+
+    // Clone library, replace base64 with file paths
+    const out = JSON.parse(JSON.stringify(library));
+    out.updated = new Date().toISOString().slice(0, 10);
+
+    let imgCount = 0, audCount = 0;
+    for (const mod of out.modules) {
+      for (const slide of mod.slides) {
+        // Images
+        for (let i = 0; i < 2; i++) {
+          if (slide.images[i].src && slide.images[i].src.startsWith('data:')) {
+            const {bytes, ext} = decodeDataUri(slide.images[i].src);
+            const fname = `${slide.id}-${i === 0 ? 'A' : 'B'}.${ext}`;
+            zip.file(`media/images/${fname}`, bytes);
+            slide.images[i].src = `media/images/${fname}`;
+            imgCount++;
+          }
+        }
+        // Audio
+        if (slide.narration && slide.narration.audio && slide.narration.audio.startsWith('data:')) {
+          const {bytes, ext} = decodeDataUri(slide.narration.audio);
+          const fname = `${slide.id}.${ext}`;
+          zip.file(`media/audio/${fname}`, bytes);
+          slide.narration.audio = `media/audio/${fname}`;
+          audCount++;
+        }
+      }
+    }
+    log(`→ Encoded ${imgCount} images, ${audCount} audio files`);
+
+    // Write data/library.json
+    zip.file('data/library.json', JSON.stringify(out, null, 2));
+    log('→ Wrote data/library.json');
+
+    // Add a placeholder so empty folders work in git
+    zip.file('media/images/.gitkeep', '');
+    zip.file('media/audio/.gitkeep', '');
+
+    log('→ Compressing…');
+    const blob = await zip.generateAsync({type: 'blob', compression: 'DEFLATE'});
+    log(`→ Bundle ready: ${(blob.size / 1024 / 1024).toFixed(2)} MB`);
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `civil-engineering-library-${out.updated}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    log('<b style="color:var(--green-dark)">✓ Downloaded — unzip into your repo and push.</b>');
+    btn.textContent = 'Build Another';
+    btn.disabled = false;
+  } catch(err) {
+    console.error(err);
+    log('<b style="color:var(--red)">✗ Error: ' + err.message + '</b>');
+    btn.textContent = 'Try Again';
+    btn.disabled = false;
+  }
+}
+
+function decodeDataUri(uri) {
+  const match = uri.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) throw new Error('Bad data URI');
+  const mime = match[1];
+  const b64 = match[2];
+  const ext = mime.split('/')[1].split(';')[0]
+    .replace('jpeg','jpg').replace('webm','webm').replace('mpeg','mp3') || 'bin';
+  // Decode base64 to Uint8Array
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return {bytes, ext};
+}
+
+/* ---------- Helpers ---------- */
+function setText(id, t) { const el = document.getElementById(id); if (el.innerText !== t) el.innerText = t || ''; }
+function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v ?? ''; }
+function esc(s) { return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function capitalize(s) { return s ? s[0].toUpperCase() + s.slice(1) : ''; }
+function formatDur(sec) {
+  if (!sec) return '';
+  const s = Math.floor(sec);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------- Welcome ---------- */
+function closeWelcome() {
+  document.getElementById('welcome').classList.remove('active');
+  localStorage.setItem('rodgers_editor_welcomed','1');
+}
+if (!localStorage.getItem('rodgers_editor_welcomed')) {
+  document.getElementById('welcome').classList.add('active');
+}
+
+/* ---------- Init ---------- */
+bindEdits();
+if (library.modules.length === 0) seedIfEmpty();
+else renderAll();
+
+/* Keyboard nav */
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, [contenteditable]')) return;
+  if (e.metaKey || e.ctrlKey) return;
+  if (e.key === 'ArrowRight' || e.key === 'j') { nextSlide(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'k') { prevSlide(); }
+});
+</script>
+</body>
+</html>

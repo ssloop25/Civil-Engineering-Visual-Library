@@ -1,0 +1,591 @@
+{
+  "version": 1,
+  "title": "Civil Engineering Visual Library",
+  "subtitle": "The Rodgers Playbook · Internal Training Series",
+  "tagline": "Creating communities with clients who share our values.",
+  "updated": "2026-04-28",
+  "modules": [
+    {
+      "id": "planning",
+      "title": "Planning / Pre-Development",
+      "icon": "01",
+      "color": "#AFC935",
+      "description": "How a parcel becomes a development.",
+      "slides": [
+        {
+          "id": "plan-01",
+          "title": "Raw Land vs. Concept Plan Overlay",
+          "subtitle": "Seeing the vision before anything is built",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "planning, concept, aerial",
+          "images": [
+            {"src": null, "label": "Raw land — pre-development aerial", "type": "Aerial view"},
+            {"src": null, "label": "Concept plan overlay — proposed use", "type": "CAD plan view"}
+          ],
+          "keyLesson": "A concept plan turns a blank site into a development story. Every lot, road, and basin begins as an idea on top of a real piece of land.",
+          "teaching": {
+            "t1": "Left: an aerial of raw, undeveloped land. Right: the same parcel with a concept plan overlay showing lots, roads, and open space.",
+            "t2": "The concept plan is the first translation of ownership boundaries and site constraints into a buildable layout.",
+            "t3": "Every line you draft later — utilities, grading, storm — exists because someone first decided what the site becomes.",
+            "t4": "Notice how the concept respects drainage, access points, and easements. Nothing is drawn at random.",
+            "t5": "Design starts with land. Always know the parcel before you touch the plan."
+          },
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "plan-02",
+          "title": "Existing Topo vs. Proposed Development Plan",
+          "subtitle": "Topography is destiny",
+          "pairing": "existing-vs-finished",
+          "level": 1,
+          "status": "draft",
+          "tags": "planning, topo, grading",
+          "images": [
+            {"src": null, "label": "Existing topographic survey", "type": "Existing condition"},
+            {"src": null, "label": "Proposed development plan", "type": "Finished condition"}
+          ],
+          "keyLesson": "Topography dictates the design. Proposed grading, drainage, and road alignments all trace back to the existing contours.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "surveying",
+      "title": "Surveying & Existing Conditions",
+      "icon": "02",
+      "color": "#AFC935",
+      "description": "The foundation of every CAD drawing.",
+      "slides": [
+        {
+          "id": "surv-01",
+          "title": "Survey Crew in the Field vs. Survey Points in CAD",
+          "subtitle": "Where every CAD drawing actually starts",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "surveying, cad",
+          "images": [
+            {"src": null, "label": "Survey crew using total station on site", "type": "Real-world photo"},
+            {"src": null, "label": "Survey point cloud / linework in CAD", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Every point in CAD started as a person standing in the field. The office drawing is only as good as the field data behind it.",
+          "teaching": {
+            "t1": "Left: a two-person crew running a total station. Right: the resulting point file and linework opened in CAD.",
+            "t2": "Field data becomes CAD data. Point numbers, descriptions, and codes carry directly from the instrument to the drawing.",
+            "t3": "If your CAD base is wrong, every downstream design is wrong. Surveyors are the foundation of accuracy.",
+            "t4": "Notice the descriptors on points — BOC, TOC, EP, IP. These codes tell you what each measurement represents.",
+            "t5": "Never disrespect the survey. That is the ground truth of the project."
+          },
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "surv-02",
+          "title": "Control Point Photo vs. Survey File View",
+          "subtitle": "The hidden anchor of every project",
+          "pairing": "real-vs-cad",
+          "level": 2,
+          "status": "draft",
+          "tags": "surveying, control",
+          "images": [
+            {"src": null, "label": "Rebar-and-cap control monument", "type": "Real-world photo"},
+            {"src": null, "label": "Same control point in the CAD file", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Control points tie the site to a coordinate system. Lose the control, lose the project.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "layout-grading",
+      "title": "Site Layout / Grading",
+      "icon": "03",
+      "color": "#D4A73F",
+      "description": "Reshaping the dirt to make a site work.",
+      "slides": [
+        {
+          "id": "grad-01",
+          "title": "Existing Contours vs. Proposed Grading Plan",
+          "subtitle": "Reshaping the dirt",
+          "pairing": "existing-vs-finished",
+          "level": 2,
+          "status": "draft",
+          "tags": "grading, contours",
+          "images": [
+            {"src": null, "label": "Existing contours from the survey", "type": "Existing condition"},
+            {"src": null, "label": "Proposed grading plan with finished contours", "type": "Finished condition"}
+          ],
+          "keyLesson": "Grading is the art of reshaping dirt. Proposed contours tell the contractor exactly where to cut and where to fill.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "grad-02",
+          "title": "Earthwork in the Field vs. Grading Plan",
+          "subtitle": "The plan becomes piles of dirt",
+          "pairing": "real-vs-cad",
+          "level": 2,
+          "status": "draft",
+          "tags": "grading, earthwork",
+          "images": [
+            {"src": null, "label": "Dozer and scraper moving dirt", "type": "Real-world photo"},
+            {"src": null, "label": "Same area on the grading plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "That grading plan becomes real piles of dirt. Volumes matter — cut and fill imbalance costs money.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "roadway",
+      "title": "Roadway Design",
+      "icon": "04",
+      "color": "#D4A73F",
+      "description": "Plan, profile, and cross-section together.",
+      "slides": [
+        {
+          "id": "road-01",
+          "title": "Road Plan View vs. Profile View",
+          "subtitle": "Every road exists in two dimensions of design",
+          "pairing": "plan-vs-section",
+          "level": 2,
+          "status": "draft",
+          "tags": "roadway, plan, profile",
+          "images": [
+            {"src": null, "label": "Road plan — horizontal alignment", "type": "CAD plan view"},
+            {"src": null, "label": "Road profile — vertical alignment", "type": "Profile view"}
+          ],
+          "keyLesson": "A road exists in two dimensions of design: plan (left-right) and profile (up-down). You must design them together.",
+          "teaching": {
+            "t1": "Left: the horizontal alignment in plan view, showing curves and stationing. Right: the vertical profile showing grade changes.",
+            "t2": "Plan controls where the road goes. Profile controls how the road rises and falls.",
+            "t3": "K-values, stopping sight distance, and drainage all depend on the profile.",
+            "t4": "Notice the stationing lines up on both views.",
+            "t5": "Never design a road in plan alone. Always check profile."
+          },
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "road-02",
+          "title": "Cross-Section vs. Built Roadway",
+          "subtitle": "A cross-section is a recipe",
+          "pairing": "diagram-vs-field",
+          "level": 3,
+          "status": "draft",
+          "tags": "roadway, cross-section",
+          "images": [
+            {"src": null, "label": "Typical roadway cross-section", "type": "Cross-section"},
+            {"src": null, "label": "Finished road showing each layer in real life", "type": "Real-world photo"}
+          ],
+          "keyLesson": "A cross-section is a recipe. Every line becomes a lift of asphalt, a sub-base, or a curb poured in the field.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "road-03",
+          "title": "Corridor Model vs. Actual Road Construction",
+          "subtitle": "The digital road drives the real one",
+          "pairing": "construction-vs-final",
+          "level": 3,
+          "status": "draft",
+          "tags": "roadway, civil3d, construction",
+          "images": [
+            {"src": null, "label": "3D corridor model in Civil 3D", "type": "CAD plan view"},
+            {"src": null, "label": "Grading crew building to the model", "type": "Construction phase"}
+          ],
+          "keyLesson": "3D models are now built directly by machine control. The digital road drives the real one.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "stormwater",
+      "title": "Stormwater / Drainage",
+      "icon": "05",
+      "color": "#D97F39",
+      "description": "Pipes, inlets, and ponds — from symbol to structure.",
+      "slides": [
+        {
+          "id": "storm-01",
+          "title": "Catch Basin in the Field vs. Storm Structure on Plan",
+          "subtitle": "Connecting the symbol to the structure",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "stormwater, catch basin",
+          "images": [
+            {"src": null, "label": "Installed catch basin at curb", "type": "Real-world photo"},
+            {"src": null, "label": "Storm structure symbol on the plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Every symbol on a storm plan is a real structure someone has to cast, set, and connect. Symbols are shorthand for reality.",
+          "teaching": {
+            "t1": "Left: a precast catch basin installed at a curb inlet. Right: the same structure called out on the plan with a structure ID and rim/invert.",
+            "t2": "The symbol on the left is what you see every day driving. The symbol on the right is how we communicate it to the contractor.",
+            "t3": "If the rim or invert on the plan is wrong, the structure is set wrong. Water does not forgive mistakes.",
+            "t4": "Notice the structure ID, rim elevation, and pipe inverts. That tiny callout is the entire build spec.",
+            "t5": "When you draft a structure, picture the real thing. Every number matters."
+          },
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "storm-02",
+          "title": "Pipe Trench vs. Pipe Network in CAD",
+          "subtitle": "Storm flows by gravity",
+          "pairing": "real-vs-cad",
+          "level": 3,
+          "status": "draft",
+          "tags": "stormwater, pipe",
+          "images": [
+            {"src": null, "label": "Open trench with bedding and RCP installed", "type": "Construction phase"},
+            {"src": null, "label": "Pipe network in CAD with slopes and inverts", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Storm pipes flow by gravity. Slope is not optional — the plan must match what gets built.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "storm-03",
+          "title": "Detention Pond vs. Stormwater Plan",
+          "subtitle": "Calculated volumes, not eyeballed holes",
+          "pairing": "real-vs-cad",
+          "level": 3,
+          "status": "draft",
+          "tags": "stormwater, pond",
+          "images": [
+            {"src": null, "label": "Constructed detention pond with outfall structure", "type": "Real-world photo"},
+            {"src": null, "label": "Stormwater plan showing pond contours and routing", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Ponds are calculated volumes, not eyeballed holes. Every elevation contour carries acre-feet of storage.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "title": "Water & Sewer Utilities",
+      "icon": "06",
+      "color": "#D97F39",
+      "description": "Hydrants, valves, sewer profiles, and the parts that make a community.",
+      "slides": [
+        {
+          "id": "util-01",
+          "title": "Fire Hydrant vs. Utility Plan",
+          "subtitle": "Symbol placement saves lives",
+          "pairing": "real-vs-cad",
+          "level": 2,
+          "status": "draft",
+          "tags": "utilities, hydrant",
+          "images": [
+            {"src": null, "label": "Fire hydrant in place on curb", "type": "Real-world photo"},
+            {"src": null, "label": "Hydrant symbol on the utility plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Hydrant spacing protects lives. The symbol placement on the plan directly determines where real hydrants go.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "util-02",
+          "title": "Sewer Trench vs. Utility Profile",
+          "subtitle": "Gravity is unforgiving",
+          "pairing": "real-vs-cad",
+          "level": 3,
+          "status": "draft",
+          "tags": "utilities, sewer",
+          "images": [
+            {"src": null, "label": "Deep sewer trench with pipe being laid", "type": "Construction phase"},
+            {"src": null, "label": "Sanitary sewer profile showing inverts and slopes", "type": "Profile view"}
+          ],
+          "keyLesson": "Sanitary sewer works on gravity and minimum slopes. The profile is the build instruction — get it right or dig twice.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "util-03",
+          "title": "Valve / Fitting vs. Plan Symbol",
+          "subtitle": "Real parts, real orders",
+          "pairing": "diagram-vs-field",
+          "level": 2,
+          "status": "draft",
+          "tags": "utilities, valve",
+          "images": [
+            {"src": null, "label": "Water valve box and fittings on site", "type": "Real-world photo"},
+            {"src": null, "label": "Same valve shown as a symbol on the utility plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Water systems are assemblies of standard fittings. Every tee, cross, and valve on plan is a real part someone orders.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "site-features",
+      "title": "Site Features / Details",
+      "icon": "07",
+      "color": "#3F4E55",
+      "description": "ADA, sidewalks, striping — the human-scale details.",
+      "slides": [
+        {
+          "id": "feat-01",
+          "title": "ADA Ramp Photo vs. ADA Detail Drawing",
+          "subtitle": "A quarter-inch matters",
+          "pairing": "diagram-vs-field",
+          "level": 2,
+          "status": "draft",
+          "tags": "ada, accessibility",
+          "images": [
+            {"src": null, "label": "Built ADA ramp with truncated domes", "type": "Real-world photo"},
+            {"src": null, "label": "ADA ramp detail showing slopes and dimensions", "type": "Detail drawing"}
+          ],
+          "keyLesson": "ADA details are legal requirements. A quarter-inch out of tolerance can trigger a rebuild.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "feat-02",
+          "title": "Sidewalk Photo vs. Site Plan",
+          "subtitle": "Connecting the site to the neighborhood",
+          "pairing": "real-vs-cad",
+          "level": 2,
+          "status": "draft",
+          "tags": "sidewalk",
+          "images": [
+            {"src": null, "label": "Finished sidewalk with joints and curb", "type": "Real-world photo"},
+            {"src": null, "label": "Sidewalk layout on the site plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Sidewalks connect the site to its neighbors. The plan defines width, joints, and slope — not just a line.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "feat-03",
+          "title": "Parking Striping vs. Pavement Detail",
+          "subtitle": "Paint follows geometry",
+          "pairing": "diagram-vs-field",
+          "level": 2,
+          "status": "draft",
+          "tags": "parking, striping",
+          "images": [
+            {"src": null, "label": "Fresh parking lot striping", "type": "Real-world photo"},
+            {"src": null, "label": "Striping and pavement detail", "type": "Detail drawing"}
+          ],
+          "keyLesson": "Paint on asphalt looks simple but follows strict geometry. Details control stall size, ADA stalls, and traffic flow.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "esc",
+      "title": "Erosion & Sediment Control",
+      "icon": "08",
+      "color": "#AFC935",
+      "description": "Keeping mud out of streams.",
+      "slides": [
+        {
+          "id": "esc-01",
+          "title": "Silt Fence in the Field vs. ESC Plan",
+          "subtitle": "Keeping mud out of streams",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "esc, silt fence",
+          "images": [
+            {"src": null, "label": "Installed silt fence along perimeter", "type": "Real-world photo"},
+            {"src": null, "label": "Silt fence shown on ESC plan", "type": "CAD plan view"}
+          ],
+          "keyLesson": "ESC is how we keep mud out of streams. The plan is a legal document that inspectors check against the field.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "esc-02",
+          "title": "Inlet Protection Photo vs. ESC Detail",
+          "subtitle": "Right install, right detail",
+          "pairing": "diagram-vs-field",
+          "level": 2,
+          "status": "draft",
+          "tags": "esc, inlet protection",
+          "images": [
+            {"src": null, "label": "Inlet protection installed at a catch basin", "type": "Real-world photo"},
+            {"src": null, "label": "ESC detail for the same device", "type": "Detail drawing"}
+          ],
+          "keyLesson": "Each ESC device has a right and wrong install. The detail is the playbook the contractor works from.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "construction",
+      "title": "Construction Phase",
+      "icon": "09",
+      "color": "#D97F39",
+      "description": "Documents become the contractor's marching orders.",
+      "slides": [
+        {
+          "id": "cons-01",
+          "title": "Excavation Photo vs. Construction Plan",
+          "subtitle": "Documents become marching orders",
+          "pairing": "real-vs-cad",
+          "level": 3,
+          "status": "draft",
+          "tags": "construction, excavation",
+          "images": [
+            {"src": null, "label": "Mass excavation on site", "type": "Construction phase"},
+            {"src": null, "label": "Grading / construction plan for same area", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Construction documents become the contractor's marching orders. Clarity in drafting equals speed in the field.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "cons-02",
+          "title": "Pipe Install vs. Utility Drawing",
+          "subtitle": "The field trusts the plan",
+          "pairing": "real-vs-cad",
+          "level": 3,
+          "status": "draft",
+          "tags": "construction, pipe",
+          "images": [
+            {"src": null, "label": "Crew installing storm or sewer pipe", "type": "Construction phase"},
+            {"src": null, "label": "Utility plan with pipe callouts", "type": "CAD plan view"}
+          ],
+          "keyLesson": "The field trusts the plan. When they hit conflicts, they stop. Good drafting prevents that stop.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "cons-03",
+          "title": "Paving Operation vs. Roadway Detail",
+          "subtitle": "Lifts and depths are sacred",
+          "pairing": "construction-vs-final",
+          "level": 3,
+          "status": "draft",
+          "tags": "construction, paving",
+          "images": [
+            {"src": null, "label": "Paver laying asphalt", "type": "Construction phase"},
+            {"src": null, "label": "Pavement section detail", "type": "Detail drawing"}
+          ],
+          "keyLesson": "Pavement lifts, depths, and compaction all come from the detail. Shortcutting any of it shortens the pavement life.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "title": "Final Built Environment",
+      "icon": "10",
+      "color": "#D4A73F",
+      "description": "Concept to community.",
+      "slides": [
+        {
+          "id": "fin-01",
+          "title": "Finished Neighborhood vs. Original Concept",
+          "subtitle": "The full lifecycle, in one view",
+          "pairing": "construction-vs-final",
+          "level": 4,
+          "status": "draft",
+          "tags": "final, neighborhood",
+          "images": [
+            {"src": null, "label": "Finished neighborhood — aerial", "type": "Aerial view"},
+            {"src": null, "label": "Original concept layout", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Every finished neighborhood traces back to a concept plan. The closer the concept matches reality, the better the team did.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "fin-02",
+          "title": "Finished Roadway vs. Design Drawing",
+          "subtitle": "Great design disappears",
+          "pairing": "construction-vs-final",
+          "level": 4,
+          "status": "draft",
+          "tags": "final, roadway",
+          "images": [
+            {"src": null, "label": "Completed, paved and striped roadway", "type": "Real-world photo"},
+            {"src": null, "label": "Road design drawing", "type": "CAD plan view"}
+          ],
+          "keyLesson": "Great design disappears into the landscape. If it works, people never notice it.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        },
+        {
+          "id": "fin-03",
+          "title": "Final Site vs. Grading / Drainage Concept",
+          "subtitle": "A site that drains is a site that lasts",
+          "pairing": "construction-vs-final",
+          "level": 5,
+          "status": "draft",
+          "tags": "final, drainage",
+          "images": [
+            {"src": null, "label": "Final site — dry, functioning, landscaped", "type": "Real-world photo"},
+            {"src": null, "label": "Grading and drainage concept that made it work", "type": "CAD plan view"}
+          ],
+          "keyLesson": "A site that drains properly is a site that lasts. Everything you learn here shows up in someone's backyard.",
+          "teaching": {"t1": "", "t2": "", "t3": "", "t4": "", "t5": ""},
+          "speakerNotes": "",
+          "narration": {"audio": null, "duration": 0, "script": ""},
+          "annotations": []
+        }
+      ]
+    }
+  ]
+}

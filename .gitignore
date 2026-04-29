@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backups & temp
+*.bak
+*~
+.tmp/
+
+# Local-only library backups (keep in git only when you want versioned backups)
+backups/
+
+# Node (only if anyone ever adds tooling)
+node_modules/
+npm-debug.log
