@@ -258,6 +258,12 @@ a:hover { text-decoration: underline; }
   gap: 20px;
   margin-bottom: 22px;
 }
+.image-pair.single-image {
+  grid-template-columns: 1fr;
+}
+.image-pair.single-image .image-card .img-wrap {
+  aspect-ratio: 16 / 9;
+}
 .image-card {
   background: #fff;
   border: 1px solid var(--line);
@@ -603,6 +609,12 @@ a:hover { text-decoration: underline; }
 .p-images {
   display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
   flex: 1; min-height: 0;
+}
+.p-images.single-image {
+  grid-template-columns: 1fr;
+}
+.p-images.single-image .p-img-wrap:nth-child(2) {
+  display: none;
 }
 .p-img-wrap {
   background: #1A2127;
@@ -1133,9 +1145,9 @@ function renderSlide() {
         `<span class="tag">${escapeHtml(t.trim())}</span>`).join('')}
     </div>
 
-    <div class="image-pair">
+    <div class="image-pair${(slide.imageLayout || 'two') === 'one' ? ' single-image' : ''}">
       ${renderImageCard(slide, 0, mod.id)}
-      ${renderImageCard(slide, 1, mod.id)}
+      ${(slide.imageLayout || 'two') === 'two' ? renderImageCard(slide, 1, mod.id) : ''}
     </div>
 
     ${slide.keyLesson ? `
@@ -1304,6 +1316,11 @@ function renderPresent() {
   document.getElementById('pSubtitle').textContent = slide.subtitle || '';
   document.getElementById('pCounter').textContent =
     `${activeSlide + 1} / ${mod.slides.length}`;
+
+  // Apply single-image layout to present mode if needed
+  const layout = slide.imageLayout || 'two';
+  const pImages = document.querySelector('.p-images');
+  if (pImages) pImages.classList.toggle('single-image', layout === 'one');
 
   const a = slide.images[0], b = slide.images[1];
   const imgA = document.getElementById('pImgA');
