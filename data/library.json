@@ -3,7 +3,7 @@
   "title": "Civil Engineering Visual Library",
   "subtitle": "The Rodgers Playbook · Internal Training Series",
   "tagline": "Creating communities with clients who share our values.",
-  "updated": "2026-05-05",
+  "updated": "2026-05-06",
   "modules": [
     {
       "id": "planning",
@@ -411,10 +411,10 @@
           "level": 1,
           "status": "draft",
           "tags": "",
-          "imageLayout": "two",
+          "imageLayout": "one",
           "images": [
             {
-              "src": null,
+              "src": "media/images/s_468rvw7-A.png",
               "label": "",
               "type": "Real-world photo"
             },
@@ -453,7 +453,47 @@
       "slides": [
         {
           "id": "s_j08a2rs",
-          "title": "First slide",
+          "title": "Understanding the Complete Sanitary Sewer System",
+          "subtitle": "",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "",
+          "imageLayout": "one",
+          "images": [
+            {
+              "src": "media/images/s_j08a2rs-A.png",
+              "label": "A detailed educational infographic showing the full sanitary sewer system from building plumbing through gravity mains, lift stations, force mains, and wastewater treatment to final discharge.",
+              "type": "Real-world photo"
+            },
+            {
+              "src": null,
+              "label": "",
+              "type": "CAD plan view"
+            }
+          ],
+          "keyLesson": "Sanitary sewers rely on gravity flow for most of their length, making slope and depth the defining design constraints. Understanding the full system helps you design the local collection network with those constraints in mind from the start.",
+          "teaching": {
+            "t1": "",
+            "t2": "",
+            "t3": "",
+            "t4": "",
+            "t5": ""
+          },
+          "speakerNotes": "",
+          "projectContext": "",
+          "resources": "",
+          "narration": {
+            "audio": "media/audio/s_j08a2rs.mp3",
+            "mime": "audio/mpeg",
+            "duration": 54.177938,
+            "script": ""
+          },
+          "annotations": []
+        },
+        {
+          "id": "s_2af1zmw",
+          "title": "Sewer House Connection",
           "subtitle": "",
           "pairing": "real-vs-cad",
           "level": 1,
@@ -462,7 +502,87 @@
           "imageLayout": "two",
           "images": [
             {
+              "src": "media/images/s_2af1zmw-A.png",
+              "label": "A detailed cross-section showing how a sanitary sewer lateral connects from the public sewer main through the property line to a building's foundation, including the cleanout location and a basement ejector pump for below-grade drainage.",
+              "type": "Diagram"
+            },
+            {
+              "src": "media/images/s_2af1zmw-B.png",
+              "label": "A CAD detail drawing showing the connection between a sanitary sewer main, manhole, and residential service lateral with pipe sizes, slopes, invert elevations, cleanout locations, and a 2-foot sweep labeled.",
+              "type": "CAD plan view"
+            }
+          ],
+          "keyLesson": "The relationship between basement floor elevation and sewer invert determines whether gravity connection is possible or an ejector pump is needed. This connects your grading decisions directly to the utility plan in ways that matter to the client.",
+          "teaching": {
+            "t1": "",
+            "t2": "",
+            "t3": "",
+            "t4": "",
+            "t5": ""
+          },
+          "speakerNotes": "",
+          "projectContext": "",
+          "resources": "",
+          "narration": {
+            "audio": null,
+            "mime": null,
+            "duration": 0,
+            "script": ""
+          },
+          "annotations": []
+        },
+        {
+          "id": "s_gl7vsdb",
+          "title": "Sanitary Sewer Profile: Line SS-1",
+          "subtitle": "",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "",
+          "imageLayout": "one",
+          "images": [
+            {
+              "src": "media/images/s_gl7vsdb-A.png",
+              "label": "A technical sanitary sewer profile drawing showing four manholes, existing ground, pipe inverts, slopes, pipe size, and a full station-elevation data table for a gravity sewer line.",
+              "type": "Profile view"
+            },
+            {
               "src": null,
+              "label": "",
+              "type": "CAD plan view"
+            }
+          ],
+          "keyLesson": "A sanitary sewer profile controls slope, depth, and invert elevations for the entire pipe run. Cover depth and minimum slope are the two values checked first in plan review, so know how to find and verify them on any profile sheet.",
+          "teaching": {
+            "t1": "",
+            "t2": "",
+            "t3": "",
+            "t4": "",
+            "t5": ""
+          },
+          "speakerNotes": "",
+          "projectContext": "",
+          "resources": "",
+          "narration": {
+            "audio": null,
+            "mime": null,
+            "duration": 0,
+            "script": ""
+          },
+          "annotations": []
+        },
+        {
+          "id": "s_ai0bjrt",
+          "title": "New Slide",
+          "subtitle": "",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "",
+          "imageLayout": "one",
+          "images": [
+            {
+              "src": "media/images/s_ai0bjrt-A.png",
               "label": "",
               "type": "Real-world photo"
             },
@@ -501,13 +621,53 @@
       "slides": [
         {
           "id": "s_v95b4mk",
-          "title": "First slide",
+          "title": "Erosion and Sediment Control BMP System: The Full Picture",
           "subtitle": "",
           "pairing": "real-vs-cad",
           "level": 1,
           "status": "draft",
           "tags": "",
-          "imageLayout": "two",
+          "imageLayout": "one",
+          "images": [
+            {
+              "src": "media/images/s_v95b4mk-A.png",
+              "label": "An educational infographic showing how multiple erosion and sediment control BMPs work together across a construction site to prevent sediment from leaving the disturbed area.",
+              "type": "Real-world photo"
+            },
+            {
+              "src": null,
+              "label": "",
+              "type": "CAD plan view"
+            }
+          ],
+          "keyLesson": "Erosion and sediment control is a system, not a checklist. Understanding how all the BMPs work together is what allows you to design a plan that actually keeps sediment on site through the full construction period.",
+          "teaching": {
+            "t1": "",
+            "t2": "",
+            "t3": "",
+            "t4": "",
+            "t5": ""
+          },
+          "speakerNotes": "",
+          "projectContext": "",
+          "resources": "",
+          "narration": {
+            "audio": "media/audio/s_v95b4mk.mp3",
+            "mime": "audio/mpeg",
+            "duration": 61.466063,
+            "script": ""
+          },
+          "annotations": []
+        },
+        {
+          "id": "s_zqmn0in",
+          "title": "New Slide",
+          "subtitle": "",
+          "pairing": "real-vs-cad",
+          "level": 1,
+          "status": "draft",
+          "tags": "",
+          "imageLayout": "one",
           "images": [
             {
               "src": null,
@@ -549,17 +709,17 @@
       "slides": [
         {
           "id": "s_ok6mvmc",
-          "title": "First slide",
+          "title": "Urban Development Transformation: Raw Land to Finished Community",
           "subtitle": "",
           "pairing": "real-vs-cad",
           "level": 1,
           "status": "draft",
           "tags": "",
-          "imageLayout": "two",
+          "imageLayout": "one",
           "images": [
             {
-              "src": null,
-              "label": "",
+              "src": "media/images/s_ok6mvmc-A.png",
+              "label": "An educational infographic illustrating the complete nine-step transformation of undeveloped land into a fully built community, from clearing and grading through utilities, roads, stormwater, buildings, landscaping, and final occupancy.",
               "type": "Real-world photo"
             },
             {
@@ -568,7 +728,7 @@
               "type": "CAD plan view"
             }
           ],
-          "keyLesson": "",
+          "keyLesson": "Every task you complete as an intern is one step in a process that transforms raw land into a place where people live, work, and gather. That's the work Rodgers does, and it's the work you're learning to contribute to.",
           "teaching": {
             "t1": "",
             "t2": "",
@@ -580,9 +740,9 @@
           "projectContext": "",
           "resources": "",
           "narration": {
-            "audio": null,
-            "mime": null,
-            "duration": 0,
+            "audio": "media/audio/s_ok6mvmc.mp3",
+            "mime": "audio/mpeg",
+            "duration": 64.9665,
             "script": ""
           },
           "annotations": []
